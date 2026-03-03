@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-content">
+        <h1 id="hero-heading">Contrate servicos para sua casa com preco justo</h1>
+        <p>Diga o que precisa, receba o preco na hora e escolha entre profissionais avaliados por quem ja contratou.</p>
+
+        <form class="hero-input-wrapper" onsubmit="event.preventDefault(); precificarRapido();" role="search" aria-label="Precificar servico">
+            <label for="hero-servico" class="sr-only">Descreva o servico</label>
+            <input type="text" id="hero-servico" class="hero-input"
+                placeholder="Ex: Trocar resistencia do chuveiro 220v"
+                autocomplete="off"
+                aria-label="Descreva o servico que voce precisa">
+            <button type="submit" id="hero-btn" class="hero-btn">
+                <i class="fi fi-rr-search" aria-hidden="true"></i> Precificar
+            </button>
+        </form>
+
+        <div id="price-result" class="price-result" role="region" aria-label="Resultado da precificacao" aria-live="polite">
+            <h3 class="price-result-title">Precificacao estimada</h3>
+            <div class="price-range">
+                <span id="price-min" class="price-value">R$ 0</span>
+                <span class="price-separator" aria-hidden="true">ate</span>
+                <span id="price-max" class="price-value">R$ 0</span>
+            </div>
+            <div class="price-details">
+                <div class="price-detail-item">
+                    <div class="label">Tempo estimado</div>
+                    <div class="value" id="price-tempo">-</div>
+                </div>
+                <div class="price-detail-item">
+                    <div class="label">Categoria</div>
+                    <div class="value" id="price-categoria">-</div>
+                </div>
+                <div class="price-detail-item">
+                    <div class="label">Complexidade</div>
+                    <div class="value" id="price-complexidade">-</div>
+                </div>
+                <div class="price-detail-item">
+                    <div class="label">Confianca</div>
+                    <div class="value" id="price-confianca">-</div>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:1.5rem">
+                <a href="/solicitar" class="btn btn-primary" style="display:inline-flex;width:auto">
+                    Solicitar este servico
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-stats" aria-label="Destaques da plataforma">
+            <div class="hero-stat">
+                <div class="hero-stat-number"><i class="fi fi-rr-bolt" aria-hidden="true"></i></div>
+                <div class="hero-stat-label">Todo tipo de servico</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number"><i class="fi fi-rr-shield-check" aria-hidden="true"></i></div>
+                <div class="hero-stat-label">Profissionais verificados</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number"><i class="fi fi-rr-calculator" aria-hidden="true"></i></div>
+                <div class="hero-stat-label">Preco justo na hora</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" aria-labelledby="how-it-works">
+    <h2 class="section-title" id="how-it-works">Como funciona</h2>
+    <p class="section-subtitle">Resolve qualquer servico em 4 passos</p>
+
+    <div class="steps-grid">
+        <div class="step-card">
+            <div class="step-number" aria-hidden="true">1</div>
+            <h3>Descreva o problema</h3>
+            <p>Escreva com suas palavras o que precisa. "Trocar chuveiro", "Pintar sala", "Desentupir pia".</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number" aria-hidden="true">2</div>
+            <h3>Receba o preco</h3>
+            <p>O sistema analisa regiao, complexidade e tipo de servico para calcular uma faixa de preco justa.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number" aria-hidden="true">3</div>
+            <h3>Escolha o profissional</h3>
+            <p>Veja o score, avaliacoes e historico de cada profissional antes de decidir.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number" aria-hidden="true">4</div>
+            <h3>Avalie depois</h3>
+            <p>Apos o servico, avalie o profissional. O score dele sobe ou desce com base no seu feedback.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<div class="section-bg">
+    <section class="section" aria-labelledby="why-proscore">
+        <h2 class="section-title" id="why-proscore">Por que usar o PROSCORE?</h2>
+        <p class="section-subtitle">O que torna a plataforma diferente</p>
+
+        <div class="features-grid" style="max-width:1100px;margin:0 auto">
+            <div class="feature-card">
+                <div class="feature-icon indigo" aria-hidden="true">
+                    <i class="fi fi-rr-brain-circuit"></i>
+                </div>
+                <h3>Preco calculado</h3>
+                <p>A faixa de preco e definida com base na regiao, tipo de servico e complexidade. Sem surpresas na hora de pagar.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon orange" aria-hidden="true">
+                    <i class="fi fi-rr-trophy"></i>
+                </div>
+                <h3>Score de 0 a 1000</h3>
+                <p>Cada profissional tem um score publico baseado em pontualidade, qualidade do servico e feedback dos clientes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon green" aria-hidden="true">
+                    <i class="fi fi-rr-shield-check"></i>
+                </div>
+                <h3>Documentos verificados</h3>
+                <p>Identidade e antecedentes conferidos antes do profissional poder atender na plataforma.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon purple" aria-hidden="true">
+                    <i class="fi fi-rr-lock"></i>
+                </div>
+                <h3>Pagamento seguro</h3>
+                <p>O valor fica retido ate a conclusao do servico. Se nao for realizado, voce recebe de volta.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section" aria-labelledby="categories">
+    <h2 class="section-title" id="categories">Categorias disponiveis</h2>
+    <p class="section-subtitle">Escolha o tipo de servico que voce precisa</p>
+
+    <div class="cat-grid" style="max-width:1100px;margin:0 auto">
+        <a href="/profissionais?cat=eletrica" class="cat-card">
+            <div class="cat-icon orange" aria-hidden="true">
+                <i class="fi fi-rr-bolt"></i>
+            </div>
+            <h3>Eletrica</h3>
+            <p>Chuveiros, tomadas, iluminacao</p>
+        </a>
+        <a href="/profissionais?cat=hidraulica" class="cat-card">
+            <div class="cat-icon blue" aria-hidden="true">
+                <i class="fi fi-rr-faucet-drip"></i>
+            </div>
+            <h3>Hidraulica</h3>
+            <p>Vazamentos, encanamento</p>
+        </a>
+        <a href="/profissionais?cat=pintura" class="cat-card">
+            <div class="cat-icon pink" aria-hidden="true">
+                <i class="fi fi-rr-paint-roller"></i>
+            </div>
+            <h3>Pintura</h3>
+            <p>Paredes, texturas, grafiato</p>
+        </a>
+        <a href="/profissionais?cat=montagem" class="cat-card">
+            <div class="cat-icon indigo" aria-hidden="true">
+                <i class="fi fi-rr-hammer"></i>
+            </div>
+            <h3>Montagem</h3>
+            <p>Moveis, prateleiras</p>
+        </a>
+        <a href="/profissionais?cat=limpeza" class="cat-card">
+            <div class="cat-icon teal" aria-hidden="true">
+                <i class="fi fi-rr-broom"></i>
+            </div>
+            <h3>Limpeza</h3>
+            <p>Residencial, pos-obra</p>
+        </a>
+        <a href="/profissionais?cat=reforma" class="cat-card">
+            <div class="cat-icon green" aria-hidden="true">
+                <i class="fi fi-rr-house-building"></i>
+            </div>
+            <h3>Reforma</h3>
+            <p>Pisos, gesso, drywall</p>
+        </a>
+    </div>
+</section>
+
+<!-- CTA -->
+<div style="padding:0 2rem 4rem">
+    <section class="cta-section" aria-labelledby="cta-heading">
+        <h2 id="cta-heading">Pronto para comecar?</h2>
+        <p>Faca uma cotacao agora mesmo - e gratis e sem compromisso</p>
+        <a href="/solicitar" class="btn btn-primary" style="display:inline-flex;width:auto;padding:0.85rem 2.5rem;font-size:1.05rem">
+            <i class="fi fi-rr-rocket" aria-hidden="true"></i> Solicitar servico
+        </a>
+    </section>
+</div>
+{% endblock %}

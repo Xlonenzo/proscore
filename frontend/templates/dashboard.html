@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="section" aria-labelledby="dashboard-heading">
+    <h2 class="section-title" id="dashboard-heading">Dashboard</h2>
+    <p class="section-subtitle">Visao geral da plataforma</p>
+
+    <div id="dashboard-content" aria-live="polite">
+        <div class="loading show" role="status">
+            <div class="spinner"></div>
+            <p>Carregando dados...</p>
+        </div>
+    </div>
+
+    <!-- Simulador de Score -->
+    <div class="form-container" style="max-width:600px;margin-top:3rem" aria-labelledby="simulator-heading">
+        <h3 id="simulator-heading" style="text-align:center;margin-bottom:0.5rem;font-size:1.15rem">
+            <i class="fi fi-rr-chart-pie-alt" aria-hidden="true"></i> Simulador de Score
+        </h3>
+        <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;font-size:0.9rem">
+            Veja como cada fator influencia o score final de um profissional
+        </p>
+
+        <div class="form-group">
+            <label for="sim-pontualidade">
+                <i class="fi fi-rr-clock" aria-hidden="true"></i>
+                Pontualidade: <strong id="val-pont">100</strong>%
+            </label>
+            <input type="range" id="sim-pontualidade" min="0" max="100" value="100" oninput="simularScore()" style="width:100%">
+        </div>
+        <div class="form-group">
+            <label for="sim-avaliacao">
+                <i class="fi fi-rr-star" aria-hidden="true"></i>
+                Avaliacao Media: <strong id="val-aval">5.0</strong>
+            </label>
+            <input type="range" id="sim-avaliacao" min="0" max="50" value="50" oninput="simularScore()" style="width:100%">
+        </div>
+        <div class="form-group">
+            <label for="sim-reclamacao">
+                <i class="fi fi-rr-flag" aria-hidden="true"></i>
+                Taxa Reclamacao: <strong id="val-recl">0</strong>%
+            </label>
+            <input type="range" id="sim-reclamacao" min="0" max="100" value="0" oninput="simularScore()" style="width:100%">
+        </div>
+        <div class="form-group">
+            <label for="sim-frequencia">
+                <i class="fi fi-rr-chart-histogram" aria-hidden="true"></i>
+                Frequencia de Uso: <strong id="val-freq">50</strong>%
+            </label>
+            <input type="range" id="sim-frequencia" min="0" max="100" value="50" oninput="simularScore()" style="width:100%">
+        </div>
+        <div class="form-group">
+            <label for="sim-recorrencia">
+                <i class="fi fi-rr-rotate-right" aria-hidden="true"></i>
+                Recorrencia: <strong id="val-recc">50</strong>%
+            </label>
+            <input type="range" id="sim-recorrencia" min="0" max="100" value="50" oninput="simularScore()" style="width:100%">
+        </div>
+        <div class="form-group">
+            <label for="sim-compliance">
+                <i class="fi fi-rr-shield-check" aria-hidden="true"></i>
+                Compliance: <strong id="val-comp">100</strong>%
+            </label>
+            <input type="range" id="sim-compliance" min="0" max="100" value="100" oninput="simularScore()" style="width:100%">
+        </div>
+
+        <div id="sim-result" style="text-align:center;margin-top:1.5rem">
+            <div class="score-meter" style="--score-pct: 80;width:150px;height:150px" role="img" aria-label="Score simulado">
+                <div class="score-meter-circle">
+                    <div class="score-meter-inner" style="width:120px;height:120px">
+                        <div id="sim-score-value" class="score-meter-value" style="font-size:2rem">800</div>
+                        <div id="sim-score-nivel" class="score-meter-label">OURO</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    carregarDashboard();
+
+    async function simularScore() {
+        const pont = document.getElementById('sim-pontualidade').value;
+        const aval = (document.getElementById('sim-avaliacao').value / 10).toFixed(1);
+        const recl = document.getElementById('sim-reclamacao').value;
+        const freq = document.getElementById('sim-frequencia').value;
+        const recc = document.getElementById('sim-recorrencia').value;
+        const comp = document.getElementById('sim-compliance').value;
+
+        document.getElementById('val-pont').textContent = pont;
+        document.getElementById('val-aval').textContent = aval;
+        document.getElementById('val-recl').textContent = recl;
+        document.getElementById('val-freq').textContent = freq;
+        document.getElementById('val-recc').textContent = recc;
+        document.getElementById('val-comp').textContent = comp;
+
+        try {
+            const data = await apiCall(
+                `/score/simular?pontualidade=${pont}&avaliacao=${aval}&reclamacoes=${recl}&frequencia=${freq}&recorrencia=${recc}&compliance=${comp}`
+            );
+
+            const scorePct = (data.score / 1000) * 100;
+            document.getElementById('sim-score-value').textContent = data.score.toFixed(0);
+            document.getElementById('sim-score-value').style.color = data.cor;
+            document.getElementById('sim-score-nivel').textContent = data.nivel;
+            document.querySelector('#sim-result .score-meter').style.setProperty('--score-pct', scorePct);
+        } catch (e) {
+            // Fallback: calculate locally
+        }
+    }
+</script>
+{% endblock %}

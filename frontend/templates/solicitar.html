@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitar Servico{% endblock %}
+
+{% block content %}
+<section class="section" aria-labelledby="solicitar-heading">
+    <h2 class="section-title" id="solicitar-heading">Solicitar Servico</h2>
+    <p class="section-subtitle">Descreva o que precisa e veja quanto custa antes de contratar</p>
+
+    <div class="form-container">
+        <form onsubmit="solicitarServico(event)" novalidate>
+            <div class="form-group">
+                <label for="descricao">
+                    <i class="fi fi-rr-document" aria-hidden="true"></i> O que voce precisa? *
+                </label>
+                <textarea id="descricao" name="descricao" required
+                    placeholder="Descreva o servico com detalhes. Ex: Trocar a resistencia do chuveiro 220v no banheiro. O chuveiro e Lorenzetti e esta esquentando pouco."
+                    aria-required="true"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nome">
+                        <i class="fi fi-rr-user" aria-hidden="true"></i> Seu nome *
+                    </label>
+                    <input type="text" id="nome" name="nome" required placeholder="Nome completo"
+                        autocomplete="name" aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fi fi-rr-envelope" aria-hidden="true"></i> Email *
+                    </label>
+                    <input type="email" id="email" name="email" required placeholder="seu@email.com"
+                        autocomplete="email" aria-required="true">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="telefone">
+                        <i class="fi fi-rr-phone-call" aria-hidden="true"></i> Telefone *
+                    </label>
+                    <input type="tel" id="telefone" name="telefone" required placeholder="(11) 99999-9999"
+                        autocomplete="tel" inputmode="tel" aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="bairro">
+                        <i class="fi fi-rr-marker" aria-hidden="true"></i> Bairro
+                    </label>
+                    <input type="text" id="bairro" name="bairro" placeholder="Ex: Moema, Pinheiros, Tatuape">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="endereco">
+                    <i class="fi fi-rr-home" aria-hidden="true"></i> Endereco
+                </label>
+                <input type="text" id="endereco" name="endereco" placeholder="Rua, numero, complemento"
+                    autocomplete="street-address">
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="urgente" name="urgente">
+                    <label for="urgente">
+                        <i class="fi fi-rr-clock" aria-hidden="true"></i> Servico URGENTE (acrescimo de 35%)
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fi fi-rr-check" aria-hidden="true"></i> Solicitar Servico
+            </button>
+        </form>
+    </div>
+
+    <div id="solicitar-result" style="max-width:700px;margin:2rem auto" aria-live="polite"></div>
+</section>
+{% endblock %}

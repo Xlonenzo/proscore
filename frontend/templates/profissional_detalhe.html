@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Profissional{% endblock %}
+
+{% block content %}
+<section class="section">
+    <nav aria-label="Navegacao de retorno" style="margin-bottom:1rem">
+        <a href="/profissionais" style="color:var(--primary);text-decoration:none;font-weight:500;font-size:0.9rem;display:inline-flex;align-items:center;gap:0.25rem">
+            &larr; Voltar para lista
+        </a>
+    </nav>
+
+    <div class="form-container" style="max-width:900px">
+        <div id="pro-detail" aria-live="polite">
+            <div class="loading show" role="status">
+                <div class="spinner"></div>
+                <p>Carregando perfil...</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    carregarProfissionalDetalhe({{ profissional_id }});
+</script>
+{% endblock %}

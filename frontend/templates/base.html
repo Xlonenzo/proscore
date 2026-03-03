@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PROSCORE - Marketplace de servicos com precificacao por IA e profissionais verificados com score de confianca.">
+    <title>{% block title %}PROSCORE{% endblock %} - Marketplace de Servicos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/regular/rounded.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/solid/rounded.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Ir para conteudo principal</a>
+
+    <nav class="navbar" role="navigation" aria-label="Navegacao principal">
+        <a href="/" class="nav-logo" aria-label="PROSCORE - Pagina inicial">PRO<span>SCORE</span></a>
+
+        <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+
+        <ul class="nav-links" id="nav-menu" role="menubar">
+            <li role="none"><a href="/" role="menuitem" {% if request.url.path == "/" %}class="active" aria-current="page"{% endif %}>Inicio</a></li>
+            <li role="none"><a href="/profissionais" role="menuitem" {% if request.url.path == "/profissionais" %}class="active" aria-current="page"{% endif %}>Profissionais</a></li>
+            <li role="none"><a href="/dashboard" role="menuitem" {% if request.url.path == "/dashboard" %}class="active" aria-current="page"{% endif %}>Dashboard</a></li>
+            <li role="none"><a href="/solicitar" role="menuitem" class="nav-cta">Solicitar Servico</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div>
+                <div class="footer-brand">PRO<span>SCORE</span></div>
+                <p class="footer-desc">Plataforma para conectar clientes a profissionais de servicos residenciais com transparencia e preco justo.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegacao</h4>
+                <a href="/">Inicio</a>
+                <a href="/profissionais">Profissionais</a>
+                <a href="/solicitar">Solicitar servico</a>
+                <a href="/dashboard">Dashboard</a>
+            </div>
+            <div class="footer-col">
+                <h4>Servicos</h4>
+                <a href="/profissionais?cat=eletrica">Eletrica</a>
+                <a href="/profissionais?cat=hidraulica">Hidraulica</a>
+                <a href="/profissionais?cat=pintura">Pintura</a>
+                <a href="/profissionais?cat=reforma">Reforma</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            PROSCORE &copy; 2026 - Sao Paulo, Brasil
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="/static/js/app.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
