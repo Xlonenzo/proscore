@@ -592,7 +592,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .cat-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(6, 1fr);
     gap: 1.25rem;
 }
 
@@ -1442,7 +1442,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     .section-title { font-size: 1.75rem; }
 
     .steps-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .cat-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    .cat-grid { display: flex; overflow-x: auto; gap: 0.75rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 0.5rem; }
+    .cat-grid .cat-card { min-width: 140px; flex-shrink: 0; scroll-snap-align: start; }
     .trust-grid { grid-template-columns: repeat(2, 1fr); }
     .form-row { grid-template-columns: 1fr; }
     .pro-grid { grid-template-columns: 1fr; }
@@ -1466,7 +1467,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     .price-value { font-size: 1.75rem; }
     .dashboard-stats { grid-template-columns: 1fr; }
     .steps-grid { grid-template-columns: 1fr; }
-    .cat-grid { grid-template-columns: 1fr 1fr; }
+    .cat-grid .cat-card { min-width: 120px; }
     .cat-card { padding: 1.25rem 0.75rem; }
     .cat-icon { width: 56px; height: 56px; font-size: 1.35rem; }
 }
