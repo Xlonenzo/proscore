@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro Cliente{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height:70vh;display:flex;align-items:center;justify-content:center">
+    <div class="form-container" style="max-width:500px">
+        <h2 style="text-align:center;margin-bottom:0.5rem;font-size:1.75rem;font-weight:800">Criar conta de Cliente</h2>
+        <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;font-size:0.9rem">Contrate servicos com preco justo</p>
+
+        <div id="registro-alert" class="alert alert-error" style="display:none" role="alert"></div>
+
+        <form id="registro-cliente-form" onsubmit="registrarCliente(event)" novalidate>
+            <div class="form-group">
+                <label for="reg-nome"><i class="fi fi-rr-user" aria-hidden="true"></i> Nome completo</label>
+                <input type="text" id="reg-nome" name="nome" required
+                    placeholder="Seu nome completo" aria-required="true">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reg-email"><i class="fi fi-rr-envelope" aria-hidden="true"></i> Email</label>
+                    <input type="email" id="reg-email" name="email" required autocomplete="email"
+                        placeholder="seu@email.com" aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="reg-telefone"><i class="fi fi-rr-phone-call" aria-hidden="true"></i> Telefone</label>
+                    <input type="tel" id="reg-telefone" name="telefone" required
+                        placeholder="(11) 99999-0000" aria-required="true">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reg-senha"><i class="fi fi-rr-lock" aria-hidden="true"></i> Senha</label>
+                <input type="password" id="reg-senha" name="senha" required autocomplete="new-password"
+                    placeholder="Minimo 6 caracteres" aria-required="true" minlength="6">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reg-endereco"><i class="fi fi-rr-marker" aria-hidden="true"></i> Endereco</label>
+                    <input type="text" id="reg-endereco" name="endereco"
+                        placeholder="Rua, numero">
+                </div>
+                <div class="form-group">
+                    <label for="reg-bairro"><i class="fi fi-rr-map-pin" aria-hidden="true"></i> Bairro</label>
+                    <input type="text" id="reg-bairro" name="bairro"
+                        placeholder="Seu bairro">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="reg-btn">
+                <i class="fi fi-rr-user-add" aria-hidden="true"></i> Criar minha conta
+            </button>
+        </form>
+
+        <p style="text-align:center;margin-top:1.25rem;font-size:0.9rem;color:var(--text-secondary)">
+            Ja tem conta? <a href="/login" style="color:var(--cta);font-weight:600;text-decoration:none">Entrar</a>
+        </p>
+        <p style="text-align:center;margin-top:0.5rem;font-size:0.85rem;color:var(--text-muted)">
+            E prestador de servico? <a href="/cadastro/prestador" style="color:var(--accent);text-decoration:none">Cadastre-se aqui</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

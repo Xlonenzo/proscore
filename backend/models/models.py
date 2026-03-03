@@ -36,6 +36,24 @@ class CategoriaServico(str, enum.Enum):
     OUTROS = "outros"
 
 
+class Usuario(Base):
+    __tablename__ = "usuarios"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(100), unique=True, nullable=False, index=True)
+    senha_hash = Column(String(255), nullable=False)
+    nome = Column(String(100), nullable=False)
+    tipo = Column(String(20), nullable=False)  # "cliente" or "prestador"
+    ativo = Column(Boolean, default=True)
+    criado_em = Column(DateTime, default=datetime.datetime.utcnow)
+
+    cliente_id = Column(Integer, ForeignKey("clientes.id"), nullable=True)
+    profissional_id = Column(Integer, ForeignKey("profissionais.id"), nullable=True)
+
+    cliente = relationship("Cliente", foreign_keys=[cliente_id])
+    profissional = relationship("Profissional", foreign_keys=[profissional_id])
+
+
 class Profissional(Base):
     __tablename__ = "profissionais"
 

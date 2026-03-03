@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height:70vh;display:flex;align-items:center;justify-content:center">
+    <div class="form-container" style="max-width:440px">
+        <h2 style="text-align:center;margin-bottom:0.5rem;font-size:1.75rem;font-weight:800">Entrar na sua conta</h2>
+        <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;font-size:0.9rem">Passa que resolve</p>
+
+        <div id="login-alert" class="alert alert-error" style="display:none" role="alert"></div>
+
+        <form id="login-form" onsubmit="fazerLogin(event)" novalidate>
+            <div class="form-group">
+                <label for="login-email"><i class="fi fi-rr-envelope" aria-hidden="true"></i> Email</label>
+                <input type="email" id="login-email" name="email" required autocomplete="email"
+                    placeholder="seu@email.com" aria-required="true">
+            </div>
+
+            <div class="form-group">
+                <label for="login-senha"><i class="fi fi-rr-lock" aria-hidden="true"></i> Senha</label>
+                <input type="password" id="login-senha" name="senha" required autocomplete="current-password"
+                    placeholder="Sua senha" aria-required="true">
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="login-btn">
+                <i class="fi fi-rr-sign-in-alt" aria-hidden="true"></i> Entrar
+            </button>
+        </form>
+
+        <div style="text-align:center;margin-top:1.5rem;font-size:0.9rem;color:var(--text-secondary)">
+            Nao tem conta?
+        </div>
+        <div style="display:flex;gap:0.75rem;margin-top:0.75rem">
+            <a href="/cadastro/cliente" class="btn btn-secondary" style="flex:1;text-decoration:none;font-size:0.85rem">
+                Sou Cliente
+            </a>
+            <a href="/cadastro/prestador" class="btn btn-secondary" style="flex:1;text-decoration:none;font-size:0.85rem">
+                Sou Prestador
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

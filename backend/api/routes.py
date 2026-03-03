@@ -1,5 +1,6 @@
 """Rotas da API PASSA."""
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from backend.database import get_db
@@ -10,9 +11,17 @@ from backend.models.models import (
     SolicitacaoServico,
     Avaliacao,
     StatusServico,
+    Usuario,
 )
 from backend.services.precificacao import precificar
 from backend.services.score import calcular_score, atualizar_score_profissional
+from backend.auth import (
+    hash_senha,
+    verificar_senha,
+    criar_token,
+    get_current_user,
+    COOKIE_NAME,
+)
 import datetime
 
 router = APIRouter(prefix="/api", tags=["PASSA"])
@@ -58,6 +67,161 @@ class AvaliacaoCreate(BaseModel):
 
 class AceitarServicoRequest(BaseModel):
     profissional_id: int
+
+
+class RegistroClienteRequest(BaseModel):
+    nome: str
+    email: str
+    senha: str
+    telefone: str
+    endereco: str = ""
+    bairro: str = ""
+
+
+class RegistroPrestadorRequest(BaseModel):
+    nome: str
+    email: str
+    senha: str
+    telefone: str
+    cpf: str
+    categoria: str
+    especialidades: str = ""
+    regiao: str = "Sao Paulo"
+
+
+class LoginRequest(BaseModel):
+    email: str
+    senha: str
+
+
+# ======== Auth ========
+
+
+@router.post("/auth/registro/cliente")
+def registro_cliente(req: RegistroClienteRequest, db: Session = Depends(get_db)):
+    """Cadastra um novo cliente."""
+    if db.query(Usuario).filter(Usuario.email == req.email).first():
+        raise HTTPException(status_code=400, detail="Email ja cadastrado")
+
+    cliente = Cliente(
+        nome=req.nome,
+        email=req.email,
+        telefone=req.telefone,
+        endereco=req.endereco,
+        bairro=req.bairro,
+    )
+    db.add(cliente)
+    db.flush()
+
+    usuario = Usuario(
+        email=req.email,
+        senha_hash=hash_senha(req.senha),
+        nome=req.nome,
+        tipo="cliente",
+        cliente_id=cliente.id,
+    )
+    db.add(usuario)
+    db.commit()
+    db.refresh(usuario)
+
+    token = criar_token({"sub": usuario.id})
+    response = JSONResponse(content={"sucesso": True, "nome": usuario.nome, "tipo": usuario.tipo})
+    response.set_cookie(
+        key=COOKIE_NAME,
+        value=token,
+        httponly=True,
+        samesite="lax",
+        max_age=86400,
+    )
+    return response
+
+
+@router.post("/auth/registro/prestador")
+def registro_prestador(req: RegistroPrestadorRequest, db: Session = Depends(get_db)):
+    """Cadastra um novo prestador de servico."""
+    if db.query(Usuario).filter(Usuario.email == req.email).first():
+        raise HTTPException(status_code=400, detail="Email ja cadastrado")
+    if db.query(Profissional).filter(Profissional.cpf == req.cpf).first():
+        raise HTTPException(status_code=400, detail="CPF ja cadastrado")
+
+    profissional = Profissional(
+        nome=req.nome,
+        email=req.email,
+        telefone=req.telefone,
+        cpf=req.cpf,
+        categoria=req.categoria,
+        especialidades=req.especialidades,
+        regiao=req.regiao,
+        score=500.0,
+    )
+    db.add(profissional)
+    db.flush()
+
+    usuario = Usuario(
+        email=req.email,
+        senha_hash=hash_senha(req.senha),
+        nome=req.nome,
+        tipo="prestador",
+        profissional_id=profissional.id,
+    )
+    db.add(usuario)
+    db.commit()
+    db.refresh(usuario)
+
+    token = criar_token({"sub": usuario.id})
+    response = JSONResponse(content={"sucesso": True, "nome": usuario.nome, "tipo": usuario.tipo})
+    response.set_cookie(
+        key=COOKIE_NAME,
+        value=token,
+        httponly=True,
+        samesite="lax",
+        max_age=86400,
+    )
+    return response
+
+
+@router.post("/auth/login")
+def login(req: LoginRequest, db: Session = Depends(get_db)):
+    """Autentica usuario."""
+    usuario = db.query(Usuario).filter(Usuario.email == req.email).first()
+    if not usuario or not verificar_senha(req.senha, usuario.senha_hash):
+        raise HTTPException(status_code=401, detail="Email ou senha incorretos")
+    if not usuario.ativo:
+        raise HTTPException(status_code=403, detail="Conta desativada")
+
+    token = criar_token({"sub": usuario.id})
+    response = JSONResponse(content={
+        "sucesso": True,
+        "nome": usuario.nome,
+        "tipo": usuario.tipo,
+    })
+    response.set_cookie(
+        key=COOKIE_NAME,
+        value=token,
+        httponly=True,
+        samesite="lax",
+        max_age=86400,
+    )
+    return response
+
+
+@router.post("/auth/logout")
+def logout():
+    """Remove cookie de autenticacao."""
+    response = JSONResponse(content={"sucesso": True})
+    response.delete_cookie(COOKIE_NAME)
+    return response
+
+
+@router.get("/auth/me")
+def me(usuario: Usuario = Depends(get_current_user)):
+    """Retorna dados do usuario logado."""
+    return {
+        "id": usuario.id,
+        "nome": usuario.nome,
+        "email": usuario.email,
+        "tipo": usuario.tipo,
+    }
 
 
 # ======== Precificação ========

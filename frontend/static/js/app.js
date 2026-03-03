@@ -528,3 +528,143 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ====== Auth Functions ======
+
+async function fazerLogin(event) {
+    event.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const alertEl = document.getElementById('login-alert');
+    const email = document.getElementById('login-email').value.trim();
+    const senha = document.getElementById('login-senha').value;
+
+    if (!email || !senha) {
+        alertEl.textContent = 'Preencha email e senha.';
+        alertEl.style.display = 'flex';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+    alertEl.style.display = 'none';
+
+    try {
+        await apiCall('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ email, senha }),
+        });
+        showToast('Login realizado com sucesso!', 'success');
+        window.location.href = '/';
+    } catch (error) {
+        alertEl.textContent = error.message || 'Email ou senha incorretos';
+        alertEl.style.display = 'flex';
+        showToast(error.message || 'Erro ao fazer login', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fi fi-rr-sign-in-alt" aria-hidden="true"></i> Entrar';
+    }
+}
+
+async function registrarCliente(event) {
+    event.preventDefault();
+    const btn = document.getElementById('reg-btn');
+    const alertEl = document.getElementById('registro-alert');
+    const form = document.getElementById('registro-cliente-form');
+
+    const nome = form.nome.value.trim();
+    const email = form.email.value.trim();
+    const senha = form.senha.value;
+    const telefone = form.telefone.value.trim();
+    const endereco = form.endereco ? form.endereco.value.trim() : '';
+    const bairro = form.bairro ? form.bairro.value.trim() : '';
+
+    if (!nome || !email || !senha || !telefone) {
+        alertEl.textContent = 'Preencha todos os campos obrigatorios.';
+        alertEl.style.display = 'flex';
+        return;
+    }
+
+    if (senha.length < 6) {
+        alertEl.textContent = 'A senha deve ter no minimo 6 caracteres.';
+        alertEl.style.display = 'flex';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Criando conta...';
+    alertEl.style.display = 'none';
+
+    try {
+        await apiCall('/auth/registro/cliente', {
+            method: 'POST',
+            body: JSON.stringify({ nome, email, senha, telefone, endereco, bairro }),
+        });
+        showToast('Conta criada com sucesso!', 'success');
+        window.location.href = '/';
+    } catch (error) {
+        alertEl.textContent = error.message || 'Erro ao criar conta';
+        alertEl.style.display = 'flex';
+        showToast(error.message || 'Erro ao criar conta', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fi fi-rr-user-add" aria-hidden="true"></i> Criar minha conta';
+    }
+}
+
+async function registrarPrestador(event) {
+    event.preventDefault();
+    const btn = document.getElementById('reg-btn');
+    const alertEl = document.getElementById('registro-alert');
+    const form = document.getElementById('registro-prestador-form');
+
+    const nome = form.nome.value.trim();
+    const email = form.email.value.trim();
+    const senha = form.senha.value;
+    const telefone = form.telefone.value.trim();
+    const cpf = form.cpf.value.trim();
+    const categoria = form.categoria.value;
+    const especialidades = form.especialidades ? form.especialidades.value.trim() : '';
+    const regiao = form.regiao ? form.regiao.value.trim() : 'Sao Paulo';
+
+    if (!nome || !email || !senha || !telefone || !cpf || !categoria) {
+        alertEl.textContent = 'Preencha todos os campos obrigatorios.';
+        alertEl.style.display = 'flex';
+        return;
+    }
+
+    if (senha.length < 6) {
+        alertEl.textContent = 'A senha deve ter no minimo 6 caracteres.';
+        alertEl.style.display = 'flex';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Criando conta...';
+    alertEl.style.display = 'none';
+
+    try {
+        await apiCall('/auth/registro/prestador', {
+            method: 'POST',
+            body: JSON.stringify({ nome, email, senha, telefone, cpf, categoria, especialidades, regiao }),
+        });
+        showToast('Conta de prestador criada com sucesso!', 'success');
+        window.location.href = '/';
+    } catch (error) {
+        alertEl.textContent = error.message || 'Erro ao criar conta';
+        alertEl.style.display = 'flex';
+        showToast(error.message || 'Erro ao criar conta', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fi fi-rr-user-add" aria-hidden="true"></i> Criar minha conta';
+    }
+}
+
+async function fazerLogout() {
+    try {
+        await apiCall('/auth/logout', { method: 'POST' });
+        showToast('Logout realizado', 'info');
+        window.location.href = '/';
+    } catch (error) {
+        window.location.href = '/';
+    }
+}

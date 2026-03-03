@@ -30,7 +30,16 @@
             <li role="none"><a href="/" role="menuitem" {% if request.url.path == "/" %}class="active" aria-current="page"{% endif %}>Inicio</a></li>
             <li role="none"><a href="/profissionais" role="menuitem" {% if request.url.path == "/profissionais" %}class="active" aria-current="page"{% endif %}>Profissionais</a></li>
             <li role="none"><a href="/dashboard" role="menuitem" {% if request.url.path == "/dashboard" %}class="active" aria-current="page"{% endif %}>Dashboard</a></li>
+            {% if usuario %}
             <li role="none"><a href="/solicitar" role="menuitem" class="nav-cta">Solicitar Servico</a></li>
+            <li role="none" class="nav-user-info">
+                <span class="nav-user-name">{{ usuario.nome.split()[0] }}</span>
+                <a href="#" role="menuitem" onclick="fazerLogout()" class="nav-logout">Sair</a>
+            </li>
+            {% else %}
+            <li role="none"><a href="/login" role="menuitem" {% if request.url.path == "/login" %}class="active" aria-current="page"{% endif %}>Entrar</a></li>
+            <li role="none"><a href="/cadastro/cliente" role="menuitem" class="nav-cta">Cadastrar</a></li>
+            {% endif %}
         </ul>
     </nav>
 

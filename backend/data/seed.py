@@ -1,6 +1,7 @@
 """Dados iniciais para popular o banco PASSA."""
 from backend.database import SessionLocal
-from backend.models.models import Profissional, Servico
+from backend.models.models import Profissional, Servico, Usuario, Cliente
+from backend.auth import hash_senha
 
 
 def seed_profissionais():
@@ -18,8 +19,8 @@ def seed_profissionais():
             telefone="(11) 99999-1001",
             cpf="111.111.111-01",
             categoria="eletrica",
-            especialidades="Instalações, chuveiros, ar condicionado",
-            regiao="São Paulo - Zona Sul",
+            especialidades="Instalacoes, chuveiros, ar condicionado",
+            regiao="Sao Paulo - Zona Sul",
             documento_verificado=True,
             antecedentes_ok=True,
             certificacoes="NR10, NR35",
@@ -41,7 +42,7 @@ def seed_profissionais():
             cpf="222.222.222-02",
             categoria="pintura",
             especialidades="Residencial, textura, grafiato",
-            regiao="São Paulo - Zona Oeste",
+            regiao="Sao Paulo - Zona Oeste",
             documento_verificado=True,
             antecedentes_ok=True,
             certificacoes="Curso Suvinil Pro",
@@ -63,7 +64,7 @@ def seed_profissionais():
             cpf="333.333.333-03",
             categoria="hidraulica",
             especialidades="Vazamentos, desentupimento, encanamento geral",
-            regiao="São Paulo - Centro",
+            regiao="Sao Paulo - Centro",
             documento_verificado=True,
             antecedentes_ok=True,
             score=750,
@@ -83,8 +84,8 @@ def seed_profissionais():
             telefone="(11) 99999-1004",
             cpf="444.444.444-04",
             categoria="montagem",
-            especialidades="Móveis planejados, cozinhas, guarda-roupas",
-            regiao="São Paulo - Zona Norte",
+            especialidades="Moveis planejados, cozinhas, guarda-roupas",
+            regiao="Sao Paulo - Zona Norte",
             documento_verificado=True,
             antecedentes_ok=False,
             score=680,
@@ -104,8 +105,8 @@ def seed_profissionais():
             telefone="(11) 99999-1005",
             cpf="555.555.555-05",
             categoria="limpeza",
-            especialidades="Residencial, pós-obra, comercial",
-            regiao="São Paulo - Zona Leste",
+            especialidades="Residencial, pos-obra, comercial",
+            regiao="Sao Paulo - Zona Leste",
             documento_verificado=True,
             antecedentes_ok=True,
             score=810,
@@ -126,10 +127,10 @@ def seed_profissionais():
             cpf="666.666.666-06",
             categoria="reforma",
             especialidades="Pisos, revestimentos, gesso, drywall",
-            regiao="São Paulo - Zona Sul",
+            regiao="Sao Paulo - Zona Sul",
             documento_verificado=True,
             antecedentes_ok=True,
-            certificacoes="CREA Técnico",
+            certificacoes="CREA Tecnico",
             score=780,
             total_servicos=95,
             taxa_conclusao=96.0,
@@ -147,8 +148,8 @@ def seed_profissionais():
             telefone="(11) 99999-1007",
             cpf="777.777.777-07",
             categoria="jardinagem",
-            especialidades="Poda, paisagismo, manutenção",
-            regiao="São Paulo - Zona Oeste",
+            especialidades="Poda, paisagismo, manutencao",
+            regiao="Sao Paulo - Zona Oeste",
             documento_verificado=False,
             antecedentes_ok=False,
             score=520,
@@ -168,8 +169,8 @@ def seed_profissionais():
             telefone="(11) 99999-1008",
             cpf="888.888.888-08",
             categoria="eletrica",
-            especialidades="Residencial, tomadas, iluminação",
-            regiao="São Paulo - Zona Leste",
+            especialidades="Residencial, tomadas, iluminacao",
+            regiao="Sao Paulo - Zona Leste",
             documento_verificado=True,
             antecedentes_ok=True,
             score=620,
@@ -194,7 +195,7 @@ def seed_profissionais():
 
 
 def seed_servicos():
-    """Cria catálogo base de serviços."""
+    """Cria catalogo base de servicos."""
     db = SessionLocal()
 
     if db.query(Servico).count() > 0:
@@ -202,15 +203,15 @@ def seed_servicos():
         return
 
     servicos = [
-        Servico(nome="Trocar resistência do chuveiro", categoria="eletrica", preco_base=150, preco_min=100, preco_max=200, tempo_estimado_min=45, complexidade=2, palavras_chave="chuveiro, resistência, 220v, 127v"),
-        Servico(nome="Instalar ventilador de teto", categoria="eletrica", preco_base=160, preco_min=100, preco_max=220, tempo_estimado_min=50, complexidade=3, palavras_chave="ventilador, teto, instalação"),
-        Servico(nome="Instalar ar condicionado", categoria="eletrica", preco_base=450, preco_min=300, preco_max=600, tempo_estimado_min=180, complexidade=4, palavras_chave="ar condicionado, split, instalação"),
-        Servico(nome="Consertar vazamento", categoria="hidraulica", preco_base=200, preco_min=120, preco_max=350, tempo_estimado_min=60, complexidade=3, palavras_chave="vazamento, cano, água"),
+        Servico(nome="Trocar resistencia do chuveiro", categoria="eletrica", preco_base=150, preco_min=100, preco_max=200, tempo_estimado_min=45, complexidade=2, palavras_chave="chuveiro, resistencia, 220v, 127v"),
+        Servico(nome="Instalar ventilador de teto", categoria="eletrica", preco_base=160, preco_min=100, preco_max=220, tempo_estimado_min=50, complexidade=3, palavras_chave="ventilador, teto, instalacao"),
+        Servico(nome="Instalar ar condicionado", categoria="eletrica", preco_base=450, preco_min=300, preco_max=600, tempo_estimado_min=180, complexidade=4, palavras_chave="ar condicionado, split, instalacao"),
+        Servico(nome="Consertar vazamento", categoria="hidraulica", preco_base=200, preco_min=120, preco_max=350, tempo_estimado_min=60, complexidade=3, palavras_chave="vazamento, cano, agua"),
         Servico(nome="Desentupir pia/vaso", categoria="hidraulica", preco_base=180, preco_min=100, preco_max=300, tempo_estimado_min=60, complexidade=3, palavras_chave="entupido, desentupir, pia, vaso"),
         Servico(nome="Pintar parede", categoria="pintura", preco_base=200, preco_min=120, preco_max=400, tempo_estimado_min=120, complexidade=2, palavras_chave="pintura, parede, pintar"),
         Servico(nome="Pintar quarto completo", categoria="pintura", preco_base=500, preco_min=350, preco_max=800, tempo_estimado_min=360, complexidade=3, palavras_chave="pintar quarto, quarto"),
-        Servico(nome="Montar móvel", categoria="montagem", preco_base=150, preco_min=80, preco_max=250, tempo_estimado_min=90, complexidade=2, palavras_chave="montar, móvel, montagem"),
-        Servico(nome="Montar guarda-roupa", categoria="montagem", preco_base=250, preco_min=150, preco_max=400, tempo_estimado_min=180, complexidade=3, palavras_chave="guarda-roupa, armário, montar"),
+        Servico(nome="Montar movel", categoria="montagem", preco_base=150, preco_min=80, preco_max=250, tempo_estimado_min=90, complexidade=2, palavras_chave="montar, movel, montagem"),
+        Servico(nome="Montar guarda-roupa", categoria="montagem", preco_base=250, preco_min=150, preco_max=400, tempo_estimado_min=180, complexidade=3, palavras_chave="guarda-roupa, armario, montar"),
         Servico(nome="Limpeza residencial", categoria="limpeza", preco_base=200, preco_min=120, preco_max=350, tempo_estimado_min=240, complexidade=2, palavras_chave="limpeza, faxina, casa"),
         Servico(nome="Trocar piso", categoria="reforma", preco_base=800, preco_min=500, preco_max=1500, tempo_estimado_min=480, complexidade=4, palavras_chave="piso, trocar, assentar"),
         Servico(nome="Aplicar gesso", categoria="reforma", preco_base=400, preco_min=250, preco_max=700, tempo_estimado_min=240, complexidade=3, palavras_chave="gesso, forro, moldura"),
@@ -224,9 +225,59 @@ def seed_servicos():
     print(f"[OK] {len(servicos)} servicos criados com sucesso!")
 
 
+def seed_usuarios():
+    """Cria usuarios de demonstracao."""
+    db = SessionLocal()
+
+    if db.query(Usuario).count() > 0:
+        db.close()
+        return
+
+    senha_demo = hash_senha("123456")
+
+    # Cliente demo
+    cliente = db.query(Cliente).filter(Cliente.email == "demo@passa.com").first()
+    if not cliente:
+        cliente = Cliente(
+            nome="Maria Demo",
+            email="demo@passa.com",
+            telefone="(11) 99999-0000",
+            endereco="Rua Exemplo, 100",
+            bairro="Centro",
+        )
+        db.add(cliente)
+        db.flush()
+
+    usuario_cliente = Usuario(
+        email="demo@passa.com",
+        senha_hash=senha_demo,
+        nome="Maria Demo",
+        tipo="cliente",
+        cliente_id=cliente.id,
+    )
+    db.add(usuario_cliente)
+
+    # Prestador demo (link to first profissional)
+    prof = db.query(Profissional).filter(Profissional.email == "carlos@passa.com").first()
+    if prof:
+        usuario_prestador = Usuario(
+            email="carlos@passa.com",
+            senha_hash=senha_demo,
+            nome="Carlos Eletricista",
+            tipo="prestador",
+            profissional_id=prof.id,
+        )
+        db.add(usuario_prestador)
+
+    db.commit()
+    db.close()
+    print("[OK] Usuarios demo criados (senha: 123456)")
+
+
 def seed_all():
     seed_profissionais()
     seed_servicos()
+    seed_usuarios()
 
 
 if __name__ == "__main__":

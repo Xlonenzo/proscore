@@ -222,6 +222,34 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .nav-cta::after { display: none !important; }
 
+/* Nav auth */
+.nav-user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-user-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding: 0.55rem 0.75rem;
+}
+
+.nav-logout {
+    font-size: 0.82rem;
+    color: var(--text-muted) !important;
+    padding: 0.4rem 0.75rem !important;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full) !important;
+}
+
+.nav-logout:hover {
+    color: var(--danger) !important;
+    border-color: var(--danger) !important;
+    background: var(--danger-bg) !important;
+}
+
 /* Hamburger */
 .nav-toggle {
     display: none;
