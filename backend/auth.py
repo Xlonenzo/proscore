@@ -3,9 +3,9 @@ import os
 from datetime import datetime, timedelta
 from typing import Optional
 
+import bcrypt
 from fastapi import Request, Depends, HTTPException
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
@@ -16,15 +16,13 @@ ALGORITHM = "HS256"
 TOKEN_EXPIRE_HOURS = 24
 COOKIE_NAME = "access_token"
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 def hash_senha(senha: str) -> str:
-    return pwd_context.hash(senha)
+    return bcrypt.hashpw(senha.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
 def verificar_senha(senha: str, senha_hash: str) -> bool:
-    return pwd_context.verify(senha, senha_hash)
+    return bcrypt.checkpw(senha.encode("utf-8"), senha_hash.encode("utf-8"))
 
 
 def criar_token(data: dict) -> str:
@@ -42,10 +40,11 @@ def get_current_user(
         raise HTTPException(status_code=401, detail="Nao autenticado")
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = payload.get("sub")
-        if user_id is None:
+        user_id_str = payload.get("sub")
+        if user_id_str is None:
             raise HTTPException(status_code=401, detail="Token invalido")
-    except JWTError:
+        user_id = int(user_id_str)
+    except (JWTError, ValueError):
         raise HTTPException(status_code=401, detail="Token invalido")
 
     usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
@@ -62,10 +61,11 @@ def get_optional_user(
         return None
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = payload.get("sub")
-        if user_id is None:
+        user_id_str = payload.get("sub")
+        if user_id_str is None:
             return None
-    except JWTError:
+        user_id = int(user_id_str)
+    except (JWTError, ValueError):
         return None
 
     usuario = db.query(Usuario).filter(Usuario.id == user_id).first()

@@ -124,7 +124,7 @@ def registro_cliente(req: RegistroClienteRequest, db: Session = Depends(get_db))
     db.commit()
     db.refresh(usuario)
 
-    token = criar_token({"sub": usuario.id})
+    token = criar_token({"sub": str(usuario.id)})
     response = JSONResponse(content={"sucesso": True, "nome": usuario.nome, "tipo": usuario.tipo})
     response.set_cookie(
         key=COOKIE_NAME,
@@ -168,7 +168,7 @@ def registro_prestador(req: RegistroPrestadorRequest, db: Session = Depends(get_
     db.commit()
     db.refresh(usuario)
 
-    token = criar_token({"sub": usuario.id})
+    token = criar_token({"sub": str(usuario.id)})
     response = JSONResponse(content={"sucesso": True, "nome": usuario.nome, "tipo": usuario.tipo})
     response.set_cookie(
         key=COOKIE_NAME,
@@ -189,7 +189,7 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
     if not usuario.ativo:
         raise HTTPException(status_code=403, detail="Conta desativada")
 
-    token = criar_token({"sub": usuario.id})
+    token = criar_token({"sub": str(usuario.id)})
     response = JSONResponse(content={
         "sucesso": True,
         "nome": usuario.nome,
