@@ -278,7 +278,10 @@ async function carregarProfissionais(categoria = '', regiao = '') {
             html += `
                 <a href="/profissional/${prof.id}" class="pro-card">
                     <div class="pro-header">
-                        <div class="pro-avatar">${getInitials(prof.nome)}</div>
+                        <div class="pro-avatar">
+                            ${getInitials(prof.nome)}
+                            ${prof.documento_verificado ? '<div class="verified-badge"></div>' : ''}
+                        </div>
                         <div class="pro-info">
                             <h3>${prof.nome}</h3>
                             <span class="categoria">${capitalize(prof.categoria)}</span>
