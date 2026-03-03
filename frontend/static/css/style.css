@@ -643,13 +643,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     z-index: 1;
 }
 
-/* Shouter: ALL category starbursts are pink #FF99FF */
-.cat-icon.orange::before,
-.cat-icon.blue::before,
-.cat-icon.indigo::before,
-.cat-icon.green::before,
-.cat-icon.pink::before,
-.cat-icon.teal::before { background: var(--pink); }
+/* Each category gets its own vibrant color */
+.cat-icon.orange::before { background: #FF376A; }
+.cat-icon.pink::before { background: #FF99FF; }
+.cat-icon.indigo::before { background: #747DFF; }
+.cat-icon.green::before { background: #22C55E; }
+.cat-icon.teal::before { background: #14B8A6; }
+.cat-icon.coral::before { background: #FF6B6B; }
 
 .cat-card h3 {
     font-size: 0.95rem;
