@@ -6,11 +6,11 @@
 /* ====== DESIGN TOKENS ====== */
 
 :root {
-    /* Shouter exact palette adapted */
-    --primary: #19195E;
-    --primary-dark: #0F0F3D;
-    --primary-light: #2D2D7A;
-    --primary-bg: #EDEAFF;
+    /* Deep plum/berry palette - feminine, no navy */
+    --primary: #6B1D5E;
+    --primary-dark: #4A1342;
+    --primary-light: #8B3D7E;
+    --primary-bg: #F8EDF5;
 
     /* CTA - Shouter Hot Pink #FF376A */
     --cta: #FF376A;
@@ -21,7 +21,7 @@
     /* Accent - Shouter Periwinkle #747DFF */
     --accent: #747DFF;
     --accent-light: #9BA2FF;
-    --accent-bg: #EDEAFF;
+    --accent-bg: #F0EDFF;
     --accent-soft: #D5D1FF;
 
     /* Pink - Shouter #FF99FF for badges/categories */
@@ -39,25 +39,25 @@
     --warning-bg: #FFFBEB;
     --danger: #EF4444;
     --danger-bg: #FEF2F2;
-    --info: #3B82F6;
-    --info-bg: #EFF6FF;
+    --info: #747DFF;
+    --info-bg: #F0EDFF;
 
-    /* Neutrals - clean like Shouter */
-    --text-primary: #19195E;
-    --text-secondary: #555570;
-    --text-muted: #9494AD;
+    /* Neutrals - warm plum tint */
+    --text-primary: #2D1628;
+    --text-secondary: #5A4D58;
+    --text-muted: #9A8E98;
     --border: #E8E8ED;
     --bg: #F7F6FB;
     --bg-alt: #EEEDF5;
     --surface: #FFFFFF;
 
     /* Shadows - very soft */
-    --shadow-xs: 0 1px 3px rgba(25,25,94,0.04);
-    --shadow-sm: 0 2px 8px rgba(25,25,94,0.05);
-    --shadow-md: 0 4px 20px rgba(25,25,94,0.07);
-    --shadow-lg: 0 8px 32px rgba(25,25,94,0.09);
-    --shadow-xl: 0 16px 48px rgba(25,25,94,0.12);
-    --shadow-hover: 0 12px 28px rgba(25,25,94,0.1);
+    --shadow-xs: 0 1px 3px rgba(107,29,94,0.04);
+    --shadow-sm: 0 2px 8px rgba(107,29,94,0.05);
+    --shadow-md: 0 4px 20px rgba(107,29,94,0.07);
+    --shadow-lg: 0 8px 32px rgba(107,29,94,0.09);
+    --shadow-xl: 0 16px 48px rgba(107,29,94,0.12);
+    --shadow-hover: 0 12px 28px rgba(107,29,94,0.1);
 
     /* Radii - Shouter uses very rounded */
     --radius-sm: 12px;
@@ -217,7 +217,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .nav-cta:hover {
     background: var(--primary-dark) !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(25,25,94,0.25) !important;
+    box-shadow: 0 4px 16px rgba(107,29,94,0.25) !important;
 }
 
 .nav-cta::after { display: none !important; }
@@ -793,7 +793,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     bottom: -2px;
     right: -2px;
     width: 20px; height: 20px;
-    background: #3B82F6;
+    background: var(--cta);
     border-radius: var(--radius-full);
     border: 2px solid var(--surface);
     display: flex;
