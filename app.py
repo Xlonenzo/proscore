@@ -1,6 +1,6 @@
-"""PROSCORE - Marketplace de Serviços com IA.
+"""PASSA - Passa que resolve.
 
-LinkedIn + Uber + Serasa para prestadores de serviço.
+Marketplace de serviços residenciais com IA.
 """
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
@@ -11,8 +11,8 @@ from backend.api.routes import router as api_router
 from backend.data.seed import seed_all
 
 app = FastAPI(
-    title="PROSCORE",
-    description="Marketplace de Serviços com Precificação IA e Score de Profissionais",
+    title="PASSA",
+    description="Passa que resolve - Marketplace de Serviços com Precificação IA",
     version="1.0.0",
 )
 

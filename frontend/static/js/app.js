@@ -1,4 +1,4 @@
-/* PROSCORE - Frontend JavaScript v2 */
+/* PASSA - Frontend JavaScript v2 */
 
 const API_BASE = '/api';
 

@@ -1,4 +1,4 @@
-"""Sistema de Score do Profissional PROSCORE.
+"""Sistema de Score do Profissional PASSA.
 
 Score de 0 a 1000 baseado em:
 - Pontualidade (20%)

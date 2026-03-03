@@ -1,4 +1,4 @@
-"""Rotas da API PROSCORE."""
+"""Rotas da API PASSA."""
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -15,7 +15,7 @@ from backend.services.precificacao import precificar
 from backend.services.score import calcular_score, atualizar_score_profissional
 import datetime
 
-router = APIRouter(prefix="/api", tags=["PROSCORE"])
+router = APIRouter(prefix="/api", tags=["PASSA"])
 
 
 # ======== Schemas ========

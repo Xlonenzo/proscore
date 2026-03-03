@@ -1,4 +1,4 @@
-"""Motor de precificação inteligente do PROSCORE.
+"""Motor de precificação inteligente do PASSA.
 
 Analisa a descrição do serviço e calcula faixa de preço
 com base em: categoria, complexidade, região, urgência e horário.

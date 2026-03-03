@@ -1,4 +1,4 @@
-"""Database models for PROSCORE."""
+"""Database models for PASSA."""
 import datetime
 from sqlalchemy import (
     Column,

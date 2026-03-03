@@ -1,4 +1,4 @@
-"""Dados iniciais para popular o banco PROSCORE."""
+"""Dados iniciais para popular o banco PASSA."""
 from backend.database import SessionLocal
 from backend.models.models import Profissional, Servico
 
@@ -14,7 +14,7 @@ def seed_profissionais():
     profissionais = [
         Profissional(
             nome="Carlos Eletricista",
-            email="carlos@proscore.com",
+            email="carlos@passa.com",
             telefone="(11) 99999-1001",
             cpf="111.111.111-01",
             categoria="eletrica",
@@ -36,7 +36,7 @@ def seed_profissionais():
         ),
         Profissional(
             nome="Ana Pintora",
-            email="ana@proscore.com",
+            email="ana@passa.com",
             telefone="(11) 99999-1002",
             cpf="222.222.222-02",
             categoria="pintura",
@@ -58,7 +58,7 @@ def seed_profissionais():
         ),
         Profissional(
             nome="Roberto Encanador",
-            email="roberto@proscore.com",
+            email="roberto@passa.com",
             telefone="(11) 99999-1003",
             cpf="333.333.333-03",
             categoria="hidraulica",
@@ -79,7 +79,7 @@ def seed_profissionais():
         ),
         Profissional(
             nome="Marcos Montador",
-            email="marcos@proscore.com",
+            email="marcos@passa.com",
             telefone="(11) 99999-1004",
             cpf="444.444.444-04",
             categoria="montagem",
@@ -100,7 +100,7 @@ def seed_profissionais():
         ),
         Profissional(
             nome="Luciana Limpeza",
-            email="luciana@proscore.com",
+            email="luciana@passa.com",
             telefone="(11) 99999-1005",
             cpf="555.555.555-05",
             categoria="limpeza",
@@ -121,7 +121,7 @@ def seed_profissionais():
         ),
         Profissional(
             nome="Pedro Reformas",
-            email="pedro@proscore.com",
+            email="pedro@passa.com",
             telefone="(11) 99999-1006",
             cpf="666.666.666-06",
             categoria="reforma",
@@ -143,7 +143,7 @@ def seed_profissionais():
         ),
         Profissional(
             nome="Jorge Jardineiro",
-            email="jorge@proscore.com",
+            email="jorge@passa.com",
             telefone="(11) 99999-1007",
             cpf="777.777.777-07",
             categoria="jardinagem",
@@ -164,7 +164,7 @@ def seed_profissionais():
         ),
         Profissional(
             nome="Fernando Eletricista Jr",
-            email="fernando@proscore.com",
+            email="fernando@passa.com",
             telefone="(11) 99999-1008",
             cpf="888.888.888-08",
             categoria="eletrica",
