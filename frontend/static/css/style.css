@@ -12,17 +12,21 @@
     --primary-light: #2D2D7A;
     --primary-bg: #EDEAFF;
 
-    /* CTA - Vibrant Orange (maps to Shouter's #FF376A role) */
-    --cta: #E8612D;
-    --cta-dark: #D14F1E;
-    --cta-light: #F28C5A;
-    --cta-bg: #FFF3ED;
+    /* CTA - Shouter Hot Pink #FF376A */
+    --cta: #FF376A;
+    --cta-dark: #E6204F;
+    --cta-light: #FF6B91;
+    --cta-bg: #FFF0F3;
 
-    /* Accent - Shouter Periwinkle */
+    /* Accent - Shouter Periwinkle #747DFF */
     --accent: #747DFF;
     --accent-light: #9BA2FF;
     --accent-bg: #EDEAFF;
     --accent-soft: #D5D1FF;
+
+    /* Pink - Shouter #FF99FF for badges/categories */
+    --pink: #FF99FF;
+    --pink-bg: #FFF0FF;
 
     /* Pop color - Shouter Lime */
     --pop: #DFF600;
@@ -43,8 +47,8 @@
     --text-secondary: #555570;
     --text-muted: #9494AD;
     --border: #E8E8ED;
-    --bg: #F5F5F7;
-    --bg-alt: #EDEDF0;
+    --bg: #F7F6FB;
+    --bg-alt: #EEEDF5;
     --surface: #FFFFFF;
 
     /* Shadows - very soft */
@@ -169,7 +173,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     letter-spacing: -0.5px;
 }
 
-.nav-logo span { color: var(--cta); }
+.nav-logo span { color: var(--pink); }
 
 .nav-links {
     display: flex;
@@ -254,7 +258,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     right: -15%;
     width: 500px; height: 500px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(116,125,255,0.2) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(255,153,255,0.2) 0%, transparent 60%);
     pointer-events: none;
 }
 
@@ -265,7 +269,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     left: -10%;
     width: 400px; height: 400px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(232,97,45,0.15) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(255,55,106,0.15) 0%, transparent 60%);
     pointer-events: none;
 }
 
@@ -639,13 +643,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     z-index: 1;
 }
 
-/* Category icon color variants for starburst */
-.cat-icon.orange::before { background: var(--cta); }
-.cat-icon.blue::before { background: var(--primary); }
-.cat-icon.indigo::before { background: var(--accent); }
-.cat-icon.green::before { background: var(--success); }
-.cat-icon.pink::before { background: #FF99FF; }
-.cat-icon.teal::before { background: #0D9488; }
+/* Shouter: ALL category starbursts are pink #FF99FF */
+.cat-icon.orange::before,
+.cat-icon.blue::before,
+.cat-icon.indigo::before,
+.cat-icon.green::before,
+.cat-icon.pink::before,
+.cat-icon.teal::before { background: var(--pink); }
 
 .cat-card h3 {
     font-size: 0.95rem;
@@ -772,7 +776,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .pro-avatar {
     width: 56px; height: 56px;
     border-radius: var(--radius-full);
-    background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+    background: linear-gradient(135deg, var(--pink) 0%, var(--accent) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -979,7 +983,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .checkbox-group { display: flex; align-items: center; gap: 0.5rem; }
-.checkbox-group input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--cta); cursor: pointer; }
+.checkbox-group input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
 .checkbox-group label { cursor: pointer; }
 
 .btn {
@@ -1002,13 +1006,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     background: var(--cta);
     color: var(--surface);
     width: 100%;
-    box-shadow: 0 2px 8px rgba(232,97,45,0.2);
+    box-shadow: 0 2px 8px rgba(255,55,106,0.2);
 }
 
 .btn-primary:hover {
     background: var(--cta-dark);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(232,97,45,0.3);
+    box-shadow: 0 6px 20px rgba(255,55,106,0.3);
 }
 
 .btn-secondary {
@@ -1299,7 +1303,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .footer-brand { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.75rem; }
-.footer-brand span { color: var(--cta); }
+.footer-brand span { color: var(--pink); }
 .footer-desc { color: rgba(255,255,255,0.5); font-size: 0.85rem; line-height: 1.6; }
 
 .footer-col h4 {
