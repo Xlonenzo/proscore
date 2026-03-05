@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} - PASSA Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/regular/rounded.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/solid/rounded.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=6">
+</head>
+<body class="admin-body">
+    <aside class="admin-sidebar" id="admin-sidebar">
+        <div class="admin-sidebar-header">
+            <a href="/admin" class="admin-logo">PAS<span>SA</span></a>
+            <small class="admin-badge">Admin</small>
+        </div>
+        <nav class="admin-nav">
+            <a href="/admin" class="admin-nav-item {% if active_tab == 'dashboard' %}active{% endif %}">
+                <i class="fi fi-rr-home" aria-hidden="true"></i>
+                <span>Visao Geral</span>
+            </a>
+            <a href="/admin/usuarios" class="admin-nav-item {% if active_tab == 'usuarios' %}active{% endif %}">
+                <i class="fi fi-rr-users" aria-hidden="true"></i>
+                <span>Usuarios</span>
+            </a>
+            <a href="/admin/solicitacoes" class="admin-nav-item {% if active_tab == 'solicitacoes' %}active{% endif %}">
+                <i class="fi fi-rr-list" aria-hidden="true"></i>
+                <span>Solicitacoes</span>
+            </a>
+            <a href="/admin/prestadores/lista" class="admin-nav-item {% if active_tab == 'prestadores_lista' %}active{% endif %}">
+                <i class="fi fi-rr-briefcase" aria-hidden="true"></i>
+                <span>Prestadores</span>
+            </a>
+            <a href="/admin/prestadores" class="admin-nav-item {% if active_tab == 'prestadores' %}active{% endif %}">
+                <i class="fi fi-rr-shield-check" aria-hidden="true"></i>
+                <span>Aprovar Pendentes</span>
+            </a>
+            <a href="/admin/analytics" class="admin-nav-item {% if active_tab == 'analytics' %}active{% endif %}">
+                <i class="fi fi-rr-chart-histogram" aria-hidden="true"></i>
+                <span>Analytics</span>
+            </a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="/" class="admin-nav-item">
+                <i class="fi fi-rr-arrow-left" aria-hidden="true"></i>
+                <span>Voltar ao site</span>
+            </a>
+            <a href="#" class="admin-nav-item" onclick="fazerLogout()">
+                <i class="fi fi-rr-sign-out-alt" aria-hidden="true"></i>
+                <span>Sair</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <button class="admin-menu-toggle" onclick="toggleAdminSidebar()" aria-label="Menu">
+                <i class="fi fi-rr-menu-burger" aria-hidden="true"></i>
+            </button>
+            <h1 class="admin-page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+            <div class="admin-topbar-right">
+                <span class="admin-user-name">{{ usuario.nome }}</span>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="/static/js/app.js?v=5"></script>
+    <script src="/static/js/admin.js?v=3"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -6,6 +6,85 @@
 <!-- HERO -->
 <section class="hero" aria-labelledby="hero-heading">
     <div class="hero-content">
+        {% if usuario and usuario.tipo == 'cliente' %}
+        <!-- HERO LOGADO: fluxo Uber-like -->
+        <h1 id="hero-heading">Ola, {{ usuario.nome.split(' ')[0] }}! O que voce precisa?</h1>
+        <p>Descreva o servico, veja o preco na hora e escolha seu profissional.</p>
+
+        <div class="hero-logado-form" id="hero-logado-form"
+             data-endereco="{{ usuario.cliente.endereco if usuario.cliente else '' }}"
+             data-bairro="{{ usuario.cliente.bairro if usuario.cliente else '' }}">
+
+            <div class="hero-endereco-row">
+                <label for="hero-endereco"><i class="fi fi-rr-marker" aria-hidden="true"></i> Seu endereco</label>
+                <input type="text" id="hero-endereco" class="hero-input"
+                    placeholder="Ex: Rua das Flores, 123 - Centro"
+                    value="{{ usuario.cliente.endereco if usuario.cliente else '' }}"
+                    onblur="salvarEndereco()">
+                <input type="text" id="hero-bairro" class="hero-input hero-input-small"
+                    placeholder="Bairro"
+                    value="{{ usuario.cliente.bairro if usuario.cliente else '' }}"
+                    onblur="salvarEndereco()">
+            </div>
+
+            <form class="hero-input-wrapper" onsubmit="event.preventDefault(); precificarRapido();">
+                <label for="hero-servico" class="sr-only">Descreva o servico</label>
+                <input type="text" id="hero-servico" class="hero-input"
+                    placeholder="Ex: Trocar resistencia do chuveiro 220v"
+                    autocomplete="off">
+                <button type="submit" id="hero-btn" class="hero-btn">
+                    <i class="fi fi-rr-search" aria-hidden="true"></i> Buscar preco
+                </button>
+            </form>
+
+            <label class="hero-urgente">
+                <input type="checkbox" id="hero-urgente"> Urgente (acrescimo de 35%)
+            </label>
+        </div>
+
+        <!-- Resultado do preco -->
+        <div id="price-result" class="price-result" role="region" aria-label="Resultado da precificacao" aria-live="polite">
+            <h3 class="price-result-title">Preco fechado</h3>
+            <div class="price-single">
+                <span id="price-value" class="price-value-big">R$ 0</span>
+            </div>
+            <div class="price-details">
+                <div class="price-detail-item">
+                    <div class="label">Tempo estimado</div>
+                    <div class="value" id="price-tempo">-</div>
+                </div>
+                <div class="price-detail-item">
+                    <div class="label">Categoria</div>
+                    <div class="value" id="price-categoria">-</div>
+                </div>
+                <div class="price-detail-item">
+                    <div class="label">Complexidade</div>
+                    <div class="value" id="price-complexidade">-</div>
+                </div>
+            </div>
+            <p id="price-detalhes" style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-top:0.75rem"></p>
+            <div style="text-align:center;margin-top:1.5rem">
+                <button onclick="aceitarEBuscar()" class="btn btn-primary" id="btn-aceitar" style="display:inline-flex;width:auto">
+                    <i class="fi fi-rr-check" aria-hidden="true"></i> Aceitar e buscar profissional
+                </button>
+            </div>
+        </div>
+
+        <!-- Profissionais encontrados -->
+        <div id="profissionais-result" class="profissionais-result" style="display:none">
+            <h3 class="price-result-title">Profissionais disponiveis</h3>
+            <div id="profissionais-grid" class="pro-grid"></div>
+        </div>
+
+        <!-- Confirmacao -->
+        <div id="confirmacao-result" class="confirmacao-box" style="display:none">
+            <i class="fi fi-rr-check-circle" style="font-size:2.5rem;color:var(--success)"></i>
+            <h3>Profissional escolhido!</h3>
+            <p>Aguarde o contato do profissional. Voce recebera uma notificacao quando ele confirmar.</p>
+        </div>
+
+        {% else %}
+        <!-- HERO VISITANTE: original -->
         <h1 id="hero-heading">Contrate servicos para sua casa com preco justo</h1>
         <p>Diga o que precisa, receba o preco na hora e escolha entre profissionais avaliados por quem ja contratou.</p>
 
@@ -21,11 +100,9 @@
         </form>
 
         <div id="price-result" class="price-result" role="region" aria-label="Resultado da precificacao" aria-live="polite">
-            <h3 class="price-result-title">Precificacao estimada</h3>
-            <div class="price-range">
-                <span id="price-min" class="price-value">R$ 0</span>
-                <span class="price-separator" aria-hidden="true">ate</span>
-                <span id="price-max" class="price-value">R$ 0</span>
+            <h3 class="price-result-title">Preco fechado</h3>
+            <div class="price-single">
+                <span id="price-value" class="price-value-big">R$ 0</span>
             </div>
             <div class="price-details">
                 <div class="price-detail-item">
@@ -40,17 +117,14 @@
                     <div class="label">Complexidade</div>
                     <div class="value" id="price-complexidade">-</div>
                 </div>
-                <div class="price-detail-item">
-                    <div class="label">Confianca</div>
-                    <div class="value" id="price-confianca">-</div>
-                </div>
             </div>
             <div style="text-align:center;margin-top:1.5rem">
-                <a href="/solicitar" class="btn btn-primary" style="display:inline-flex;width:auto">
-                    Solicitar este servico
+                <a href="/login" class="btn btn-primary" style="display:inline-flex;width:auto">
+                    Entrar para solicitar
                 </a>
             </div>
         </div>
+        {% endif %}
 
         <div class="hero-stats" aria-label="Destaques da plataforma">
             <div class="hero-stat">

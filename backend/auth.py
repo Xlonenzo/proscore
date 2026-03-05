@@ -32,10 +32,21 @@ def criar_token(data: dict) -> str:
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
+def _extract_token(request: Request) -> Optional[str]:
+    """Extract token from cookie (web) or Authorization header (mobile)."""
+    token = request.cookies.get(COOKIE_NAME)
+    if token:
+        return token
+    auth_header = request.headers.get("authorization", "")
+    if auth_header.startswith("Bearer "):
+        return auth_header[7:]
+    return None
+
+
 def get_current_user(
     request: Request, db: Session = Depends(get_db)
 ) -> Usuario:
-    token = request.cookies.get(COOKIE_NAME)
+    token = _extract_token(request)
     if not token:
         raise HTTPException(status_code=401, detail="Nao autenticado")
     try:
@@ -53,10 +64,19 @@ def get_current_user(
     return usuario
 
 
+def get_admin_user(
+    request: Request, db: Session = Depends(get_db)
+) -> Usuario:
+    usuario = get_current_user(request, db)
+    if not usuario.is_admin:
+        raise HTTPException(status_code=403, detail="Acesso restrito a administradores")
+    return usuario
+
+
 def get_optional_user(
     request: Request, db: Session = Depends(get_db)
 ) -> Optional[Usuario]:
-    token = request.cookies.get(COOKIE_NAME)
+    token = _extract_token(request)
     if not token:
         return None
     try:

@@ -1,0 +1,23 @@
+{% extends "admin_base.html" %}
+{% block title %}Aprovar Prestadores{% endblock %}
+{% block page_title %}Aprovar Prestadores{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <p class="admin-card-subtitle" id="pendentes-count">Carregando...</p>
+
+    <div id="pendentes-list" class="admin-pendentes-grid">
+    </div>
+
+    <div id="pendentes-empty" class="admin-empty" style="display:none;">
+        <i class="fi fi-rr-shield-check" aria-hidden="true" style="font-size:2rem; color: var(--success);"></i>
+        <p>Nenhum prestador pendente de aprovacao.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => loadPrestadoresPendentes());
+</script>
+{% endblock %}

@@ -100,6 +100,10 @@ async function apiCall(endpoint, options = {}) {
 
 // ====== Precificacao Rapida (Hero) ======
 
+// Store last pricing data for the "aceitar" flow
+let _lastPrecificacao = null;
+let _lastDescricao = '';
+
 async function precificarRapido() {
     const input = document.getElementById('hero-servico');
     if (!input) return;
@@ -114,34 +118,193 @@ async function precificarRapido() {
     const btn = document.getElementById('hero-btn');
     const resultDiv = document.getElementById('price-result');
 
+    // Get regiao from address field if logged in
+    const bairroInput = document.getElementById('hero-bairro');
+    const urgenteCheck = document.getElementById('hero-urgente');
+    const regiao = bairroInput ? bairroInput.value.trim() : '';
+    const urgente = urgenteCheck ? urgenteCheck.checked : false;
+
     btn.disabled = true;
-    btn.textContent = 'Calculando...';
+    btn.innerHTML = '<i class="fi fi-rr-spinner" aria-hidden="true"></i> Calculando...';
 
     try {
         const data = await apiCall('/precificar', {
             method: 'POST',
             body: JSON.stringify({
                 descricao: descricao,
-                regiao: '',
-                urgente: false,
+                regiao: regiao,
+                urgente: urgente,
             }),
         });
 
         const p = data.precificacao;
-        document.getElementById('price-min').textContent = `R$ ${p.preco_min.toFixed(0)}`;
-        document.getElementById('price-max').textContent = `R$ ${p.preco_max.toFixed(0)}`;
+        _lastPrecificacao = p;
+        _lastDescricao = descricao;
+
+        document.getElementById('price-value').textContent = `R$ ${p.preco.toFixed(0)}`;
         document.getElementById('price-tempo').textContent = formatarTempo(p.tempo_estimado_min);
         document.getElementById('price-categoria').textContent = capitalize(p.categoria);
         document.getElementById('price-complexidade').textContent = `${p.complexidade}/5`;
-        document.getElementById('price-confianca').textContent = `${(p.confianca * 100).toFixed(0)}%`;
+
+        const detalhesEl = document.getElementById('price-detalhes');
+        if (detalhesEl && p.detalhes) {
+            detalhesEl.textContent = p.detalhes;
+        }
 
         resultDiv.classList.add('show');
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (error) {
-        showToast('Erro ao precificar. Tente novamente.', 'error');
+        console.error('Precificar error:', error);
+        showToast('Erro ao precificar: ' + (error.message || 'Tente novamente'), 'error');
     } finally {
         btn.disabled = false;
-        btn.textContent = 'Precificar';
+        btn.innerHTML = '<i class="fi fi-rr-search" aria-hidden="true"></i> Buscar preco';
+    }
+}
+
+// ====== Salvar Endereco (auto-save on blur) ======
+
+async function salvarEndereco() {
+    const enderecoInput = document.getElementById('hero-endereco');
+    const bairroInput = document.getElementById('hero-bairro');
+    if (!enderecoInput || !bairroInput) return;
+
+    const endereco = enderecoInput.value.trim();
+    const bairro = bairroInput.value.trim();
+
+    // Check if changed from original
+    const form = document.getElementById('hero-logado-form');
+    if (!form) return;
+    const origEndereco = form.dataset.endereco || '';
+    const origBairro = form.dataset.bairro || '';
+
+    if (endereco === origEndereco && bairro === origBairro) return;
+
+    try {
+        await apiCall('/auth/endereco', {
+            method: 'PUT',
+            body: JSON.stringify({ endereco, bairro }),
+        });
+        // Update data attributes to prevent re-saving
+        form.dataset.endereco = endereco;
+        form.dataset.bairro = bairro;
+        showToast('Endereco salvo!', 'success', 2000);
+    } catch (error) {
+        // Silent fail - address save is not critical
+        console.error('Erro ao salvar endereco:', error);
+    }
+}
+
+// ====== Aceitar Preco e Buscar Profissional ======
+
+async function aceitarEBuscar() {
+    const descricao = _lastDescricao || document.getElementById('hero-servico')?.value?.trim();
+    if (!descricao) {
+        showToast('Primeiro busque o preco do servico.', 'info');
+        return;
+    }
+
+    const urgenteCheck = document.getElementById('hero-urgente');
+    const urgente = urgenteCheck ? urgenteCheck.checked : false;
+    const btn = document.getElementById('btn-aceitar');
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fi fi-rr-spinner" aria-hidden="true"></i> Buscando profissionais...';
+
+    try {
+        const data = await apiCall('/solicitar-logado', {
+            method: 'POST',
+            body: JSON.stringify({ descricao, urgente }),
+        });
+
+        // Store solicitacao_id for choosing professional
+        window._solicitacaoId = data.solicitacao_id;
+
+        const profDiv = document.getElementById('profissionais-result');
+        const grid = document.getElementById('profissionais-grid');
+
+        if (data.profissionais_disponiveis && data.profissionais_disponiveis.length > 0) {
+            let html = '';
+            for (const prof of data.profissionais_disponiveis) {
+                const scoreClass = getScoreClass(prof.score);
+                const chegada = prof.tempo_chegada_min || 0;
+                html += `
+                    <div class="pro-card">
+                        <div class="pro-chegada">
+                            <i class="fi fi-rr-marker" aria-hidden="true"></i>
+                            <span>${chegada} min</span>
+                        </div>
+                        <div class="pro-header">
+                            <div class="pro-avatar">${getInitials(prof.nome)}</div>
+                            <div class="pro-info">
+                                <h3>${prof.nome}</h3>
+                                <span class="categoria">${capitalize(prof.categoria)}</span>
+                                ${prof.regiao ? `<span style="display:block;font-size:0.75rem;color:var(--text-muted)">${prof.regiao}</span>` : ''}
+                            </div>
+                            <div class="pro-score-badge ${scoreClass}">
+                                <div class="pro-score-value">${prof.score.toFixed(0)}</div>
+                                <div class="pro-score-label">score</div>
+                            </div>
+                        </div>
+                        <div class="pro-stats">
+                            <div class="pro-stat">
+                                <div class="label">Avaliacao</div>
+                                <div class="value">${prof.avaliacao_media.toFixed(1)}</div>
+                            </div>
+                            <div class="pro-stat">
+                                <div class="label">Servicos</div>
+                                <div class="value">${prof.total_servicos}</div>
+                            </div>
+                            <div class="pro-stat">
+                                <div class="label">Conclusao</div>
+                                <div class="value">${prof.taxa_conclusao.toFixed(0)}%</div>
+                            </div>
+                        </div>
+                        <div class="pro-badges">
+                            ${prof.documento_verificado ? '<span class="badge badge-verified">Verificado</span>' : ''}
+                            ${prof.antecedentes_ok ? '<span class="badge badge-antecedentes">Antecedentes OK</span>' : ''}
+                        </div>
+                        <button onclick="escolherProfissional(${data.solicitacao_id}, ${prof.id})" class="btn btn-primary btn-escolher">
+                            <i class="fi fi-rr-check" aria-hidden="true"></i> Escolher este profissional
+                        </button>
+                    </div>
+                `;
+            }
+            grid.innerHTML = html;
+            profDiv.style.display = 'block';
+            profDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:2rem">Nenhum profissional disponivel para esta categoria no momento.</p>';
+            profDiv.style.display = 'block';
+        }
+
+        showToast('Solicitacao criada! Escolha seu profissional.', 'success');
+    } catch (error) {
+        showToast(error.message || 'Erro ao buscar profissionais.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fi fi-rr-check" aria-hidden="true"></i> Aceitar e buscar profissional';
+    }
+}
+
+// ====== Escolher Profissional ======
+
+async function escolherProfissional(solicitacaoId, profissionalId) {
+    try {
+        await apiCall(`/solicitacoes/${solicitacaoId}/aceitar`, {
+            method: 'POST',
+            body: JSON.stringify({ profissional_id: profissionalId }),
+        });
+
+        // Hide professionals grid, show confirmation
+        document.getElementById('profissionais-result').style.display = 'none';
+        document.getElementById('price-result').classList.remove('show');
+        document.getElementById('confirmacao-result').style.display = 'flex';
+        document.getElementById('confirmacao-result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        showToast('Profissional escolhido com sucesso!', 'success');
+    } catch (error) {
+        showToast(error.message || 'Erro ao escolher profissional.', 'error');
     }
 }
 
@@ -177,11 +340,9 @@ async function solicitarServico(event) {
                 Solicitacao #${data.solicitacao_id} criada com sucesso!
             </div>
             <div class="price-result show" style="display:block">
-                <h3 class="price-result-title">Precificacao IA</h3>
-                <div class="price-range">
-                    <span class="price-value">R$ ${p.preco_min.toFixed(0)}</span>
-                    <span class="price-separator" aria-hidden="true">ate</span>
-                    <span class="price-value">R$ ${p.preco_max.toFixed(0)}</span>
+                <h3 class="price-result-title">Preco fechado</h3>
+                <div class="price-single">
+                    <span class="price-value-big">R$ ${p.preco.toFixed(0)}</span>
                 </div>
                 <div class="price-details">
                     <div class="price-detail-item">

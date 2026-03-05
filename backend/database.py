@@ -37,5 +37,21 @@ def init_db():
         Avaliacao,
         SolicitacaoServico,
         Usuario,
+        Pagamento,
     )
     Base.metadata.create_all(bind=engine)
+    _migrate(engine)
+
+
+def _migrate(eng):
+    """Add columns that may be missing in existing databases."""
+    from sqlalchemy import inspect, text
+    insp = inspect(eng)
+    if "usuarios" in insp.get_table_names():
+        cols = [c["name"] for c in insp.get_columns("usuarios")]
+        if "is_admin" not in cols:
+            with eng.begin() as conn:
+                conn.execute(text(
+                    "ALTER TABLE usuarios ADD COLUMN is_admin BOOLEAN DEFAULT 0"
+                ))
+            print("[MIGRATE] Added is_admin column to usuarios")

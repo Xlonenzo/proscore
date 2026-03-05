@@ -1,0 +1,48 @@
+{% extends "admin_base.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block page_title %}Usuarios{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-toolbar">
+        <input type="text" id="busca-usuario" class="admin-input" placeholder="Buscar por nome ou email..." oninput="debounceSearch()">
+        <select id="filtro-tipo" class="admin-select" onchange="loadUsuarios()">
+            <option value="">Todos os tipos</option>
+            <option value="cliente">Clientes</option>
+            <option value="prestador">Prestadores</option>
+        </select>
+        <select id="filtro-ativo" class="admin-select" onchange="loadUsuarios()">
+            <option value="">Todos</option>
+            <option value="true">Ativos</option>
+            <option value="false">Suspensos</option>
+        </select>
+    </div>
+
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Tipo</th>
+                    <th>Status</th>
+                    <th>Criado em</th>
+                    <th>Acoes</th>
+                </tr>
+            </thead>
+            <tbody id="usuarios-tbody">
+                <tr><td colspan="7" class="text-center text-muted">Carregando...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-pagination" id="usuarios-pagination"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => loadUsuarios());
+</script>
+{% endblock %}

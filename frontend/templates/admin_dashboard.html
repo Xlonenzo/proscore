@@ -1,0 +1,82 @@
+{% extends "admin_base.html" %}
+{% block title %}Visao Geral{% endblock %}
+{% block page_title %}Visao Geral{% endblock %}
+
+{% block content %}
+<div class="admin-kpi-grid" id="kpi-grid">
+    <div class="admin-kpi-card">
+        <div class="admin-kpi-icon" style="background: var(--primary-bg); color: var(--primary);">
+            <i class="fi fi-rr-users" aria-hidden="true"></i>
+        </div>
+        <div class="admin-kpi-info">
+            <span class="admin-kpi-value" id="kpi-usuarios">—</span>
+            <span class="admin-kpi-label">Usuarios</span>
+        </div>
+    </div>
+    <div class="admin-kpi-card">
+        <div class="admin-kpi-icon" style="background: var(--cta-bg); color: var(--cta);">
+            <i class="fi fi-rr-briefcase" aria-hidden="true"></i>
+        </div>
+        <div class="admin-kpi-info">
+            <span class="admin-kpi-value" id="kpi-solicitacoes">—</span>
+            <span class="admin-kpi-label">Solicitacoes</span>
+        </div>
+    </div>
+    <div class="admin-kpi-card">
+        <div class="admin-kpi-icon" style="background: var(--success-bg); color: var(--success);">
+            <i class="fi fi-rr-dollar" aria-hidden="true"></i>
+        </div>
+        <div class="admin-kpi-info">
+            <span class="admin-kpi-value" id="kpi-receita">—</span>
+            <span class="admin-kpi-label">Receita Total</span>
+        </div>
+    </div>
+    <div class="admin-kpi-card">
+        <div class="admin-kpi-icon" style="background: var(--accent-bg); color: var(--accent);">
+            <i class="fi fi-rr-star" aria-hidden="true"></i>
+        </div>
+        <div class="admin-kpi-info">
+            <span class="admin-kpi-value" id="kpi-avaliacao">—</span>
+            <span class="admin-kpi-label">Avaliacao Media</span>
+        </div>
+    </div>
+</div>
+
+<div class="admin-grid-2">
+    <div class="admin-card">
+        <h3 class="admin-card-title">Resumo do Mes</h3>
+        <div class="admin-stats-row">
+            <div class="admin-stat">
+                <span class="admin-stat-value" id="stat-sol-mes">—</span>
+                <span class="admin-stat-label">Servicos este mes</span>
+            </div>
+            <div class="admin-stat">
+                <span class="admin-stat-value" id="stat-taxa">—</span>
+                <span class="admin-stat-label">Taxa de conclusao</span>
+            </div>
+            <div class="admin-stat">
+                <span class="admin-stat-value" id="stat-clientes">—</span>
+                <span class="admin-stat-label">Clientes</span>
+            </div>
+            <div class="admin-stat">
+                <span class="admin-stat-value" id="stat-prestadores">—</span>
+                <span class="admin-stat-label">Prestadores</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <h3 class="admin-card-title">Atividade Recente</h3>
+        <div class="admin-activity-list" id="activity-list">
+            <p class="text-muted">Carregando...</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => loadDashboard());
+</script>
+{% endblock %}

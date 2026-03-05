@@ -1,0 +1,59 @@
+{% extends "admin_base.html" %}
+{% block title %}Solicitacoes{% endblock %}
+{% block page_title %}Solicitacoes{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-toolbar">
+        <select id="filtro-status" class="admin-select" onchange="loadSolicitacoes()">
+            <option value="">Todos os status</option>
+            <option value="pendente">Pendente</option>
+            <option value="aceito">Aceito</option>
+            <option value="em_andamento">Em andamento</option>
+            <option value="concluido">Concluido</option>
+            <option value="cancelado">Cancelado</option>
+        </select>
+        <select id="filtro-categoria" class="admin-select" onchange="loadSolicitacoes()">
+            <option value="">Todas categorias</option>
+            <option value="eletrica">Eletrica</option>
+            <option value="hidraulica">Hidraulica</option>
+            <option value="pintura">Pintura</option>
+            <option value="montagem">Montagem</option>
+            <option value="limpeza">Limpeza</option>
+            <option value="jardinagem">Jardinagem</option>
+            <option value="reforma">Reforma</option>
+            <option value="manutencao">Manutencao</option>
+            <option value="outros">Outros</option>
+        </select>
+    </div>
+
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descricao</th>
+                    <th>Categoria</th>
+                    <th>Status</th>
+                    <th>Preco</th>
+                    <th>Cliente</th>
+                    <th>Profissional</th>
+                    <th>Data</th>
+                    <th>Acoes</th>
+                </tr>
+            </thead>
+            <tbody id="solicitacoes-tbody">
+                <tr><td colspan="9" class="text-center text-muted">Carregando...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-pagination" id="solicitacoes-pagination"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => loadSolicitacoes());
+</script>
+{% endblock %}

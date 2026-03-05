@@ -1,0 +1,99 @@
+{% extends "admin_base.html" %}
+{% block title %}Analytics{% endblock %}
+{% block page_title %}Analytics{% endblock %}
+
+{% block content %}
+<!-- KPIs resumo -->
+<div class="admin-kpi-grid" id="analytics-kpis">
+    <div class="admin-kpi-card">
+        <div class="admin-kpi-icon" style="background: var(--success-bg); color: var(--success);">
+            <i class="fi fi-rr-dollar" aria-hidden="true"></i>
+        </div>
+        <div class="admin-kpi-info">
+            <span class="admin-kpi-value" id="ak-receita">—</span>
+            <span class="admin-kpi-label">Receita Total</span>
+        </div>
+    </div>
+    <div class="admin-kpi-card">
+        <div class="admin-kpi-icon" style="background: var(--primary-bg); color: var(--primary);">
+            <i class="fi fi-rr-receipt" aria-hidden="true"></i>
+        </div>
+        <div class="admin-kpi-info">
+            <span class="admin-kpi-value" id="ak-ticket">—</span>
+            <span class="admin-kpi-label">Ticket Medio</span>
+        </div>
+    </div>
+    <div class="admin-kpi-card">
+        <div class="admin-kpi-icon" style="background: var(--accent-bg); color: var(--accent);">
+            <i class="fi fi-rr-chart-line-up" aria-hidden="true"></i>
+        </div>
+        <div class="admin-kpi-info">
+            <span class="admin-kpi-value" id="ak-taxa">—</span>
+            <span class="admin-kpi-label">Taxa Conclusao</span>
+        </div>
+    </div>
+    <div class="admin-kpi-card">
+        <div class="admin-kpi-icon" style="background: var(--cta-bg); color: var(--cta);">
+            <i class="fi fi-rr-users" aria-hidden="true"></i>
+        </div>
+        <div class="admin-kpi-info">
+            <span class="admin-kpi-value" id="ak-usuarios">—</span>
+            <span class="admin-kpi-label">Usuarios Totais</span>
+        </div>
+    </div>
+</div>
+
+<!-- Receita + Ticket Medio -->
+<div class="admin-grid-2">
+    <div class="admin-card">
+        <h3 class="admin-card-title"><i class="fi fi-rr-dollar" aria-hidden="true"></i> Receita por Mes</h3>
+        <div class="admin-chart" id="chart-revenue">
+            <p class="text-muted">Carregando...</p>
+        </div>
+    </div>
+    <div class="admin-card">
+        <h3 class="admin-card-title"><i class="fi fi-rr-ticket" aria-hidden="true"></i> Ticket Medio por Mes</h3>
+        <div class="admin-chart" id="chart-ticket">
+            <p class="text-muted">Carregando...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Status + Categorias -->
+<div class="admin-grid-2">
+    <div class="admin-card">
+        <h3 class="admin-card-title"><i class="fi fi-rr-signal-alt" aria-hidden="true"></i> Distribuicao por Status</h3>
+        <div class="admin-chart" id="chart-status">
+            <p class="text-muted">Carregando...</p>
+        </div>
+    </div>
+    <div class="admin-card">
+        <h3 class="admin-card-title"><i class="fi fi-rr-apps" aria-hidden="true"></i> Servicos por Categoria</h3>
+        <div class="admin-chart" id="chart-categorias">
+            <p class="text-muted">Carregando...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Crescimento + Top Prestadores -->
+<div class="admin-grid-2">
+    <div class="admin-card">
+        <h3 class="admin-card-title"><i class="fi fi-rr-chart-line-up" aria-hidden="true"></i> Crescimento de Usuarios</h3>
+        <div class="admin-chart" id="chart-crescimento">
+            <p class="text-muted">Carregando...</p>
+        </div>
+    </div>
+    <div class="admin-card">
+        <h3 class="admin-card-title"><i class="fi fi-rr-trophy" aria-hidden="true"></i> Top 10 Prestadores</h3>
+        <div id="top-prestadores">
+            <p class="text-muted">Carregando...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => loadAnalytics());
+</script>
+{% endblock %}

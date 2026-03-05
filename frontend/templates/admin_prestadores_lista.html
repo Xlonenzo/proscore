@@ -1,0 +1,58 @@
+{% extends "admin_base.html" %}
+{% block title %}Prestadores{% endblock %}
+{% block page_title %}Prestadores{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-toolbar">
+        <input type="text" id="busca-prestador" class="admin-input" placeholder="Buscar por nome ou email..." oninput="debouncePrestadorSearch()">
+        <select id="filtro-cat-prest" class="admin-select" onchange="loadPrestadores()">
+            <option value="">Todas categorias</option>
+            <option value="eletrica">Eletrica</option>
+            <option value="hidraulica">Hidraulica</option>
+            <option value="pintura">Pintura</option>
+            <option value="montagem">Montagem</option>
+            <option value="limpeza">Limpeza</option>
+            <option value="jardinagem">Jardinagem</option>
+            <option value="reforma">Reforma</option>
+            <option value="manutencao">Manutencao</option>
+            <option value="outros">Outros</option>
+        </select>
+        <select id="filtro-ativo-prest" class="admin-select" onchange="loadPrestadores()">
+            <option value="">Todos</option>
+            <option value="true">Ativos</option>
+            <option value="false">Inativos</option>
+        </select>
+    </div>
+
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Regiao</th>
+                    <th>Score</th>
+                    <th>Servicos</th>
+                    <th>Avaliacao</th>
+                    <th>Verificacao</th>
+                    <th>Status</th>
+                    <th>Acoes</th>
+                </tr>
+            </thead>
+            <tbody id="prestadores-tbody">
+                <tr><td colspan="10" class="text-center text-muted">Carregando...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-pagination" id="prestadores-pagination"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => loadPrestadores());
+</script>
+{% endblock %}

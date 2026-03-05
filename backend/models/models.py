@@ -44,6 +44,7 @@ class Usuario(Base):
     senha_hash = Column(String(255), nullable=False)
     nome = Column(String(100), nullable=False)
     tipo = Column(String(20), nullable=False)  # "cliente" or "prestador"
+    is_admin = Column(Boolean, default=False)
     ativo = Column(Boolean, default=True)
     criado_em = Column(DateTime, default=datetime.datetime.utcnow)
 
@@ -61,10 +62,11 @@ class Profissional(Base):
     nome = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     telefone = Column(String(20), nullable=False)
-    cpf = Column(String(14), unique=True, nullable=False)
+    cpf = Column(String(14), unique=True, nullable=True)
     categoria = Column(String(50), nullable=False)
     especialidades = Column(Text, default="")
-    regiao = Column(String(100), nullable=False)
+    descricao_servicos = Column(Text, default="")
+    regiao = Column(String(100), default="")
     foto_url = Column(String(255), default="")
     documento_verificado = Column(Boolean, default=False)
     antecedentes_ok = Column(Boolean, default=False)
@@ -79,6 +81,8 @@ class Profissional(Base):
     frequencia_uso = Column(Float, default=0.0)
     recorrencia = Column(Float, default=0.0)
     compliance = Column(Float, default=100.0)
+    stripe_connect_id = Column(String(255), nullable=True)
+    online = Column(Boolean, default=False)
     ativo = Column(Boolean, default=True)
     criado_em = Column(DateTime, default=datetime.datetime.utcnow)
     atualizado_em = Column(
@@ -102,6 +106,7 @@ class Cliente(Base):
     cidade = Column(String(100), default="São Paulo")
     bairro = Column(String(100), default="")
     cep = Column(String(10), default="")
+    stripe_customer_id = Column(String(255), nullable=True)
     criado_em = Column(DateTime, default=datetime.datetime.utcnow)
 
     solicitacoes = relationship("SolicitacaoServico", back_populates="cliente")
@@ -172,3 +177,22 @@ class Avaliacao(Base):
     solicitacao = relationship("SolicitacaoServico", back_populates="avaliacao")
     profissional = relationship("Profissional", back_populates="avaliacoes")
     cliente = relationship("Cliente", back_populates="avaliacoes")
+
+
+class Pagamento(Base):
+    __tablename__ = "pagamentos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    solicitacao_id = Column(Integer, ForeignKey("solicitacoes.id"), nullable=False)
+    stripe_payment_intent_id = Column(String(255), unique=True, nullable=False)
+    stripe_transfer_id = Column(String(255), nullable=True)
+    valor_total = Column(Float, nullable=False)
+    valor_profissional = Column(Float, nullable=False)
+    valor_plataforma = Column(Float, nullable=False)
+    metodo = Column(String(20), default="cartao")  # cartao, pix
+    status = Column(String(30), default="pendente")  # pendente, pago, transferido, reembolsado, falhou
+    criado_em = Column(DateTime, default=datetime.datetime.utcnow)
+    pago_em = Column(DateTime, nullable=True)
+    transferido_em = Column(DateTime, nullable=True)
+
+    solicitacao = relationship("SolicitacaoServico")

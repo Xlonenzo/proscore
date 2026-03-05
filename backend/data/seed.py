@@ -257,27 +257,85 @@ def seed_usuarios():
     )
     db.add(usuario_cliente)
 
-    # Prestador demo (link to first profissional)
-    prof = db.query(Profissional).filter(Profissional.email == "carlos@passa.com").first()
-    if prof:
-        usuario_prestador = Usuario(
-            email="carlos@passa.com",
-            senha_hash=senha_demo,
-            nome="Carlos Eletricista",
-            tipo="prestador",
-            profissional_id=prof.id,
-        )
-        db.add(usuario_prestador)
+    # Cria usuario para cada profissional
+    profissionais = db.query(Profissional).all()
+    for prof in profissionais:
+        ja_existe = db.query(Usuario).filter(Usuario.email == prof.email).first()
+        if not ja_existe:
+            usuario_prestador = Usuario(
+                email=prof.email,
+                senha_hash=senha_demo,
+                nome=prof.nome,
+                tipo="prestador",
+                profissional_id=prof.id,
+            )
+            db.add(usuario_prestador)
 
     db.commit()
     db.close()
     print("[OK] Usuarios demo criados (senha: 123456)")
 
 
+def seed_admin():
+    """Cria usuario admin padrao com perfil cliente completo."""
+    db = SessionLocal()
+    admin = db.query(Usuario).filter(Usuario.email == "admin@passa.app").first()
+    if not admin:
+        # Cria perfil cliente para o admin poder usar todas as funcionalidades
+        cliente_admin = Cliente(
+            nome="Administrador PASSA",
+            email="admin@passa.app",
+            telefone="(11) 99999-9999",
+            endereco="Sede PASSA",
+            cidade="Sao Paulo",
+            bairro="Centro",
+        )
+        db.add(cliente_admin)
+        db.flush()
+
+        admin = Usuario(
+            email="admin@passa.app",
+            senha_hash=hash_senha("admin123"),
+            nome="Administrador",
+            tipo="cliente",
+            is_admin=True,
+            cliente_id=cliente_admin.id,
+        )
+        db.add(admin)
+        db.commit()
+        print("[OK] Admin criado (admin@passa.app / admin123)")
+    else:
+        changed = False
+        if not admin.is_admin:
+            admin.is_admin = True
+            changed = True
+        # Garante que admin tem perfil cliente vinculado
+        if not admin.cliente_id:
+            cliente_admin = db.query(Cliente).filter(Cliente.email == "admin@passa.app").first()
+            if not cliente_admin:
+                cliente_admin = Cliente(
+                    nome="Administrador PASSA",
+                    email="admin@passa.app",
+                    telefone="(11) 99999-9999",
+                    endereco="Sede PASSA",
+                    cidade="Sao Paulo",
+                    bairro="Centro",
+                )
+                db.add(cliente_admin)
+                db.flush()
+            admin.cliente_id = cliente_admin.id
+            changed = True
+        if changed:
+            db.commit()
+            print("[OK] Admin atualizado")
+    db.close()
+
+
 def seed_all():
     seed_profissionais()
     seed_servicos()
     seed_usuarios()
+    seed_admin()
 
 
 if __name__ == "__main__":
