@@ -34,6 +34,7 @@ app.add_middleware(
 
 # Static files & templates
 app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
+app.mount("/media", StaticFiles(directory="media"), name="media")
 templates = Jinja2Templates(directory="frontend/templates")
 
 # API routes

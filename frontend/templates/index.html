@@ -5,6 +5,14 @@
 {% block content %}
 <!-- HERO -->
 <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-video-bg">
+        <video id="hero-vid-1" autoplay muted loop playsinline>
+            <source src="/media/6035907_Hands_Screwdriver_3840x2160.mp4" type="video/mp4">
+        </video>
+        <video id="hero-vid-2" autoplay muted loop playsinline>
+            <source src="/media/5998100_People_Person_3840x2160.mp4" type="video/mp4">
+        </video>
+    </div>
     <div class="hero-content">
         {% if usuario and usuario.tipo == 'cliente' %}
         <!-- HERO LOGADO: fluxo Uber-like -->
@@ -143,27 +151,6 @@
     </div>
 </section>
 
-<!-- STATS COUNTER -->
-<section class="stats-counter reveal">
-    <div class="stats-counter-grid">
-        <div class="stats-counter-item reveal reveal-delay-1">
-            <div class="stats-counter-number">500+</div>
-            <div class="stats-counter-label">Profissionais verificados</div>
-        </div>
-        <div class="stats-counter-item reveal reveal-delay-2">
-            <div class="stats-counter-number">10k+</div>
-            <div class="stats-counter-label">Servicos realizados</div>
-        </div>
-        <div class="stats-counter-item reveal reveal-delay-3">
-            <div class="stats-counter-number">4.8</div>
-            <div class="stats-counter-label">Avaliacao media</div>
-        </div>
-        <div class="stats-counter-item reveal reveal-delay-4">
-            <div class="stats-counter-number">98%</div>
-            <div class="stats-counter-label">Clientes satisfeitos</div>
-        </div>
-    </div>
-</section>
 
 <!-- CATEGORIES -->
 <section class="section" aria-labelledby="categories">
@@ -264,8 +251,8 @@
     <h2 class="section-title reveal" id="why-passa">Por que usar o PASSA?</h2>
     <p class="section-subtitle reveal reveal-delay-1">O que torna a plataforma diferente</p>
 
-    <div class="features-grid" style="max-width:1100px;margin:0 auto">
-        <div class="feature-card feature-card-large reveal reveal-delay-1">
+    <div class="features-grid">
+        <div class="feature-card reveal reveal-delay-1">
             <div class="feature-icon" aria-hidden="true">
                 <i class="fi fi-rr-shield-check"></i>
             </div>
@@ -349,4 +336,34 @@
         </a>
     </section>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Hero video crossfade
+(function() {
+    const v1 = document.getElementById('hero-vid-1');
+    const v2 = document.getElementById('hero-vid-2');
+    if (!v1 || !v2) return;
+
+    let active = 1;
+    const FADE = 1500;
+    const HOLD = 8000;
+
+    v1.style.transition = 'opacity ' + FADE + 'ms ease';
+    v2.style.transition = 'opacity ' + FADE + 'ms ease';
+
+    setInterval(function() {
+        if (active === 1) {
+            v1.style.opacity = '0';
+            v2.style.opacity = '1';
+            active = 2;
+        } else {
+            v1.style.opacity = '1';
+            v2.style.opacity = '0';
+            active = 1;
+        }
+    }, HOLD);
+})();
+</script>
 {% endblock %}
