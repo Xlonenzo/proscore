@@ -5,23 +5,25 @@
 {% block content %}
 <section class="section" aria-labelledby="profissionais-heading">
     <h2 class="section-title" id="profissionais-heading">Profissionais</h2>
-    <p class="section-subtitle">Ordenados por score - quanto maior, mais confiavel</p>
+    <p class="section-subtitle">Ordenados por score - quanto maior, mais confiável</p>
 
     <div class="alert alert-info" style="max-width:700px;margin:0 auto 2rem">
         <i class="fi fi-rr-info" aria-hidden="true" style="flex-shrink:0"></i>
-        <span>A plataforma esta em fase de lancamento. Os profissionais abaixo sao exemplos para demonstrar como o sistema de score funciona.</span>
+        <span>A plataforma está em fase de lançamento. Os profissionais abaixo são exemplos para demonstrar como o sistema de score funciona.</span>
     </div>
 
     <div class="filter-bar" role="search" aria-label="Filtrar profissionais">
         <label for="filter-categoria" class="sr-only">Filtrar por categoria</label>
         <select id="filter-categoria" onchange="filtrarProfissionais()" aria-label="Filtrar por categoria">
             <option value="">Todas as categorias</option>
-            <option value="eletrica">Eletrica</option>
-            <option value="hidraulica">Hidraulica</option>
+            <option value="eletrica">Elétrica</option>
+            <option value="hidraulica">Hidráulica</option>
             <option value="pintura">Pintura</option>
-            <option value="montagem">Montagem</option>
-            <option value="limpeza">Limpeza</option>
+            <option value="montagem">Montagem e Reparos</option>
+            <option value="limpeza">Limpeza e Faxina</option>
             <option value="jardinagem">Jardinagem</option>
+            <option value="organizacao">Organização</option>
+            <option value="costura">Costura e Ajustes</option>
             <option value="reforma">Reforma</option>
         </select>
     </div>
