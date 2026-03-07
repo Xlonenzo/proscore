@@ -31,6 +31,25 @@ import datetime
 router = APIRouter(prefix="/api", tags=["PASSA"])
 
 
+@router.get("/health")
+def health_check(db: Session = Depends(get_db)):
+    """Diagnostico do banco de dados."""
+    from sqlalchemy import text, inspect
+    try:
+        insp = inspect(db.bind)
+        tables = insp.get_table_names()
+        result = {"status": "ok", "tables": {}}
+        for t in ["usuarios", "clientes", "profissionais", "solicitacoes", "avaliacoes", "servicos", "pagamentos"]:
+            if t in tables:
+                cols = [c["name"] for c in insp.get_columns(t)]
+                result["tables"][t] = cols
+            else:
+                result["tables"][t] = "MISSING"
+        return result
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
+
+
 # ======== Schemas ========
 
 
@@ -133,27 +152,35 @@ def registro_cliente(req: RegistroClienteRequest, db: Session = Depends(get_db))
     """Cadastra um novo cliente."""
     if db.query(Usuario).filter(Usuario.email == req.email).first():
         raise HTTPException(status_code=400, detail="Email ja cadastrado")
+    if db.query(Cliente).filter(Cliente.email == req.email).first():
+        raise HTTPException(status_code=400, detail="Email ja cadastrado")
 
-    cliente = Cliente(
-        nome=req.nome,
-        email=req.email,
-        telefone=req.telefone,
-        endereco=req.endereco,
-        bairro=req.bairro,
-    )
-    db.add(cliente)
-    db.flush()
+    try:
+        cliente = Cliente(
+            nome=req.nome,
+            email=req.email,
+            telefone=req.telefone,
+            endereco=req.endereco or "Nao informado",
+            bairro=req.bairro,
+        )
+        db.add(cliente)
+        db.flush()
 
-    usuario = Usuario(
-        email=req.email,
-        senha_hash=hash_senha(req.senha),
-        nome=req.nome,
-        tipo="cliente",
-        cliente_id=cliente.id,
-    )
-    db.add(usuario)
-    db.commit()
-    db.refresh(usuario)
+        usuario = Usuario(
+            email=req.email,
+            senha_hash=hash_senha(req.senha),
+            nome=req.nome,
+            tipo="cliente",
+            cliente_id=cliente.id,
+        )
+        db.add(usuario)
+        db.commit()
+        db.refresh(usuario)
+    except Exception as e:
+        db.rollback()
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Erro ao criar conta: {e}")
 
     token = criar_token({"sub": str(usuario.id)})
     response = JSONResponse(content={"sucesso": True, "token": token, "nome": usuario.nome, "tipo": usuario.tipo})
@@ -162,6 +189,7 @@ def registro_cliente(req: RegistroClienteRequest, db: Session = Depends(get_db))
         value=token,
         httponly=True,
         samesite="lax",
+        secure=True,
         max_age=86400,
     )
     return response
@@ -175,29 +203,35 @@ def registro_prestador(req: RegistroPrestadorRequest, db: Session = Depends(get_
     if req.cpf and db.query(Profissional).filter(Profissional.cpf == req.cpf).first():
         raise HTTPException(status_code=400, detail="CPF ja cadastrado")
 
-    profissional = Profissional(
-        nome=req.nome,
-        email=req.email,
-        telefone=req.telefone,
-        cpf=req.cpf or None,
-        categoria=req.categoria,
-        especialidades=req.especialidades,
-        descricao_servicos=req.descricao_servicos,
-        regiao=req.regiao,
-        score=500.0,
-    )
-    db.add(profissional)
-    db.flush()
+    try:
+        profissional = Profissional(
+            nome=req.nome,
+            email=req.email,
+            telefone=req.telefone,
+            cpf=req.cpf or None,
+            categoria=req.categoria,
+            especialidades=req.especialidades,
+            descricao_servicos=req.descricao_servicos,
+            regiao=req.regiao,
+            score=500.0,
+        )
+        db.add(profissional)
+        db.flush()
 
-    usuario = Usuario(
-        email=req.email,
-        senha_hash=hash_senha(req.senha),
-        nome=req.nome,
-        tipo="prestador",
-        profissional_id=profissional.id,
-    )
-    db.add(usuario)
-    db.commit()
+        usuario = Usuario(
+            email=req.email,
+            senha_hash=hash_senha(req.senha),
+            nome=req.nome,
+            tipo="prestador",
+            profissional_id=profissional.id,
+        )
+        db.add(usuario)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Erro ao criar conta: {e}")
     db.refresh(usuario)
 
     token = criar_token({"sub": str(usuario.id)})
@@ -207,6 +241,7 @@ def registro_prestador(req: RegistroPrestadorRequest, db: Session = Depends(get_
         value=token,
         httponly=True,
         samesite="lax",
+        secure=True,
         max_age=86400,
     )
     return response
@@ -233,6 +268,7 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
         value=token,
         httponly=True,
         samesite="lax",
+        secure=True,
         max_age=86400,
     )
     return response
@@ -331,15 +367,19 @@ def criar_solicitacao(req: SolicitacaoRequest, db: Session = Depends(get_db)):
     # Busca ou cria cliente
     cliente = db.query(Cliente).filter(Cliente.email == req.email_cliente).first()
     if not cliente:
-        cliente = Cliente(
-            nome=req.nome_cliente,
-            email=req.email_cliente,
-            telefone=req.telefone_cliente,
-            endereco=req.endereco,
-            bairro=req.bairro,
-        )
-        db.add(cliente)
-        db.flush()
+        try:
+            cliente = Cliente(
+                nome=req.nome_cliente,
+                email=req.email_cliente,
+                telefone=req.telefone_cliente,
+                endereco=req.endereco or "Nao informado",
+                bairro=req.bairro,
+            )
+            db.add(cliente)
+            db.flush()
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(status_code=500, detail=f"Erro ao criar cliente: {e}")
 
     # Precifica
     preco = precificar(req.descricao, req.bairro, req.urgente)

@@ -13,7 +13,11 @@ connect_args = {}
 if DATABASE_URL.startswith("sqlite"):
     connect_args = {"check_same_thread": False}
 
-engine = create_engine(DATABASE_URL, connect_args=connect_args)
+engine = create_engine(
+    DATABASE_URL,
+    connect_args=connect_args,
+    pool_pre_ping=True,
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
@@ -73,6 +77,27 @@ def _migrate(eng):
     _add_col("profissionais", "compliance", "FLOAT DEFAULT 100.0")
     _add_col("profissionais", "avaliacao_media", "FLOAT DEFAULT 0.0")
 
-    # solicitacoes_servico
-    _add_col("solicitacoes_servico", "payment_intent_id", "VARCHAR(255)")
-    _add_col("solicitacoes_servico", "pago", "BOOLEAN DEFAULT FALSE")
+    # clientes - columns that may be missing
+    _add_col("clientes", "cidade", "VARCHAR(100) DEFAULT 'Sao Paulo'")
+    _add_col("clientes", "bairro", "VARCHAR(100) DEFAULT ''")
+    _add_col("clientes", "cep", "VARCHAR(10) DEFAULT ''")
+    _add_col("clientes", "stripe_customer_id", "VARCHAR(255)")
+    _add_col("clientes", "criado_em", "TIMESTAMP")
+
+    # solicitacoes
+    _add_col("solicitacoes", "payment_intent_id", "VARCHAR(255)")
+    _add_col("solicitacoes", "pago", "BOOLEAN DEFAULT FALSE")
+    _add_col("solicitacoes", "categoria", "VARCHAR(50) DEFAULT 'outros'")
+    _add_col("solicitacoes", "endereco", "VARCHAR(255) DEFAULT ''")
+    _add_col("solicitacoes", "bairro", "VARCHAR(100) DEFAULT ''")
+    _add_col("solicitacoes", "preco_sugerido_min", "FLOAT DEFAULT 0.0")
+    _add_col("solicitacoes", "preco_sugerido_max", "FLOAT DEFAULT 0.0")
+    _add_col("solicitacoes", "preco_final", "FLOAT DEFAULT 0.0")
+    _add_col("solicitacoes", "tempo_estimado_min", "INTEGER DEFAULT 0")
+    _add_col("solicitacoes", "finalizado_em", "TIMESTAMP")
+
+    # usuarios - additional columns
+    _add_col("usuarios", "ativo", "BOOLEAN DEFAULT TRUE")
+    _add_col("usuarios", "criado_em", "TIMESTAMP")
+    _add_col("usuarios", "cliente_id", "INTEGER")
+    _add_col("usuarios", "profissional_id", "INTEGER")
