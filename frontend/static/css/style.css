@@ -1,37 +1,37 @@
 /* ============================
-   PASSA - Design System v9
+   PASSA - Design System v10
    Passa que resolve
-   Brand Identity: #242423
+   Brand Identity: Navy + Salmon
    ============================ */
 
 /* ====== DESIGN TOKENS ====== */
 
 :root {
-    /* Primary - Brand Charcoal (from logo) */
-    --primary: #242423;
-    --primary-dark: #1A1A19;
-    --primary-light: #3D3D3C;
-    --primary-bg: #F4F4F3;
+    /* Primary - Navy Blue */
+    --primary: #1B2A4A;
+    --primary-dark: #0F1D36;
+    --primary-light: #2D4470;
+    --primary-bg: #EEF1F7;
 
-    /* CTA - Warm Amber (energy, action) */
-    --cta: #E8A020;
-    --cta-dark: #D4911A;
-    --cta-light: #F0B84D;
-    --cta-bg: #FFF9EB;
+    /* CTA - Salmon (warm, feminine energy) */
+    --cta: #F2786D;
+    --cta-dark: #E05E52;
+    --cta-light: #F59B93;
+    --cta-bg: #FFF0EE;
 
-    /* Accent - Cool Slate */
-    --accent: #4A4A49;
-    --accent-light: #6B6B6A;
-    --accent-bg: #F4F4F3;
-    --accent-soft: #D4D4D3;
+    /* Accent - Soft Rose */
+    --accent: #D4748C;
+    --accent-light: #E8A0B2;
+    --accent-bg: #FDF2F5;
+    --accent-soft: #F0D0DA;
 
     /* Emerald for trust/verified */
     --emerald: #10B981;
     --emerald-bg: #ECFDF5;
 
     /* Amber for warmth */
-    --amber: #E8A020;
-    --amber-bg: #FFF9EB;
+    --amber: #F2786D;
+    --amber-bg: #FFF0EE;
 
     /* Semantic */
     --success: #10B981;
@@ -41,17 +41,17 @@
     --warning-bg: #FFFBEB;
     --danger: #EF4444;
     --danger-bg: #FEF2F2;
-    --info: #4A4A49;
-    --info-bg: #F4F4F3;
+    --info: #5B7AA7;
+    --info-bg: #EEF3FA;
 
-    /* Neutrals (warm tones matching logo) */
-    --text-primary: #242423;
-    --text-secondary: #5C5C5B;
-    --text-muted: #9A9A99;
-    --border: #E5E5E4;
-    --border-light: #F0F0EF;
-    --bg: #FAFAF9;
-    --bg-alt: #F4F4F3;
+    /* Neutrals (soft warm tones) */
+    --text-primary: #1B2A4A;
+    --text-secondary: #5A6B85;
+    --text-muted: #94A3B8;
+    --border: #E2E8F0;
+    --border-light: #F1F5F9;
+    --bg: #FAFBFD;
+    --bg-alt: #F4F6FA;
     --surface: #FFFFFF;
 
     /* Shadows */
@@ -60,7 +60,7 @@
     --shadow-md: 0 4px 8px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.04);
     --shadow-lg: 0 12px 20px -4px rgba(0,0,0,0.08), 0 4px 8px -4px rgba(0,0,0,0.04);
     --shadow-xl: 0 24px 32px -8px rgba(0,0,0,0.1), 0 8px 12px -6px rgba(0,0,0,0.04);
-    --shadow-hover: 0 20px 40px -8px rgba(36,36,35,0.15);
+    --shadow-hover: 0 20px 40px -8px rgba(27,42,74,0.15);
     --shadow-glow: none;
     --shadow-purple-glow: var(--shadow-lg);
 
@@ -326,7 +326,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* ====== HERO ====== */
 
 .hero {
-    background: #242423;
+    background: #1B2A4A;
     padding: 8rem 2rem 6rem;
     text-align: center;
     color: #F8F8F7;
@@ -366,7 +366,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(36, 36, 35, 0.72);
+    background: rgba(27, 42, 74, 0.72);
     z-index: 1;
 }
 
@@ -457,7 +457,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .hero-btn:hover {
     background: var(--cta-dark);
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(232,160,32,0.35);
+    box-shadow: 0 8px 24px rgba(242,120,109,0.35);
 }
 
 .hero-btn:disabled {
@@ -825,12 +825,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 /* Each category gets its own color */
-.cat-icon.orange::before { background: #E8572A; }
-.cat-icon.coral::before { background: #E8A020; }
-.cat-icon.pink::before { background: #8B5CF6; }
-.cat-icon.indigo::before { background: #242423; }
-.cat-icon.teal::before { background: #0D9488; }
-.cat-icon.green::before { background: #16A34A; }
+.cat-icon.orange::before { background: #F2786D; }
+.cat-icon.coral::before { background: #D4748C; }
+.cat-icon.pink::before { background: #9B8EC4; }
+.cat-icon.indigo::before { background: #1B2A4A; }
+.cat-icon.teal::before { background: #5B9EA6; }
+.cat-icon.green::before { background: #6BAF8D; }
 
 .cat-card h3 {
     font-family: var(--font-display);
@@ -951,7 +951,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     font-size: 1.3rem;
     flex-shrink: 0;
     border-radius: var(--radius);
-    background: #242423;
+    background: var(--primary);
     color: #F8F8F7;
 }
 
@@ -1242,7 +1242,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .form-group select:focus {
     border-color: var(--accent);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    box-shadow: 0 0 0 3px rgba(212,116,140,0.15);
 }
 
 .form-group input.error,
@@ -1284,13 +1284,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .btn-primary {
-    background: #242423;
+    background: var(--primary);
     color: #F8F8F7;
     width: 100%;
 }
 
 .btn-primary:hover {
-    background: #1A1A19;
+    background: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
 }
@@ -1428,7 +1428,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .filter-bar input:focus {
     border-color: var(--accent);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    box-shadow: 0 0 0 3px rgba(212,116,140,0.15);
 }
 
 /* ====== SCORE BREAKDOWN ====== */
@@ -1572,7 +1572,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* ====== FOOTER ====== */
 
 .footer {
-    background: #1A1A19;
+    background: #0F1D36;
     color: #F8F8F7;
     padding: 5rem 2rem 2.5rem;
     position: relative;
@@ -1633,7 +1633,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* ====== CTA SECTION ====== */
 
 .cta-section {
-    background: #242423;
+    background: var(--primary);
     border-radius: var(--radius-2xl);
     padding: 5rem 2rem;
     text-align: center;
