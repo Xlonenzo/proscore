@@ -47,11 +47,32 @@ def _migrate(eng):
     """Add columns that may be missing in existing databases."""
     from sqlalchemy import inspect, text
     insp = inspect(eng)
-    if "usuarios" in insp.get_table_names():
-        cols = [c["name"] for c in insp.get_columns("usuarios")]
-        if "is_admin" not in cols:
+    tables = insp.get_table_names()
+
+    def _add_col(table, column, col_type):
+        if table not in tables:
+            return
+        cols = [c["name"] for c in insp.get_columns(table)]
+        if column not in cols:
             with eng.begin() as conn:
-                conn.execute(text(
-                    "ALTER TABLE usuarios ADD COLUMN is_admin BOOLEAN DEFAULT FALSE"
-                ))
-            print("[MIGRATE] Added is_admin column to usuarios")
+                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {col_type}"))
+            print(f"[MIGRATE] Added {column} to {table}")
+
+    # usuarios
+    _add_col("usuarios", "is_admin", "BOOLEAN DEFAULT FALSE")
+
+    # profissionais - columns that may be missing
+    _add_col("profissionais", "online", "BOOLEAN DEFAULT FALSE")
+    _add_col("profissionais", "stripe_connect_id", "VARCHAR(255)")
+    _add_col("profissionais", "descricao_servicos", "TEXT DEFAULT ''")
+    _add_col("profissionais", "foto_url", "VARCHAR(255) DEFAULT ''")
+    _add_col("profissionais", "total_reclamacoes", "INTEGER DEFAULT 0")
+    _add_col("profissionais", "pontualidade", "FLOAT DEFAULT 100.0")
+    _add_col("profissionais", "frequencia_uso", "FLOAT DEFAULT 0.0")
+    _add_col("profissionais", "recorrencia", "FLOAT DEFAULT 0.0")
+    _add_col("profissionais", "compliance", "FLOAT DEFAULT 100.0")
+    _add_col("profissionais", "avaliacao_media", "FLOAT DEFAULT 0.0")
+
+    # solicitacoes_servico
+    _add_col("solicitacoes_servico", "payment_intent_id", "VARCHAR(255)")
+    _add_col("solicitacoes_servico", "pago", "BOOLEAN DEFAULT FALSE")
