@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Inicio{% endblock %}
+{% block title %}Início{% endblock %}
 
 {% block content %}
 <!-- HERO -->
@@ -16,15 +16,15 @@
     <div class="hero-content">
         {% if usuario and usuario.tipo == 'cliente' %}
         <!-- HERO LOGADO: fluxo Uber-like -->
-        <h1 id="hero-heading"><span class="hero-highlight">Ola, {{ usuario.nome.split(' ')[0] }}!</span><br>O que voce precisa?</h1>
-        <p>Descreva o servico, veja o preco na hora e escolha seu profissional.</p>
+        <h1 id="hero-heading"><span class="hero-highlight">Ola, {{ usuario.nome.split(' ')[0] }}!</span><br>O que você precisa?</h1>
+        <p>Descreva o serviço, veja o preço na hora e escolha seu profissional.</p>
 
         <div class="hero-logado-form" id="hero-logado-form"
              data-endereco="{{ usuario.cliente.endereco if usuario.cliente else '' }}"
              data-bairro="{{ usuario.cliente.bairro if usuario.cliente else '' }}">
 
             <div class="hero-endereco-row">
-                <label for="hero-endereco"><i class="fi fi-rr-marker" aria-hidden="true"></i> Seu endereco</label>
+                <label for="hero-endereco"><i class="fi fi-rr-marker" aria-hidden="true"></i> Seu endereço</label>
                 <input type="text" id="hero-endereco" class="hero-input"
                     placeholder="Ex: Rua das Flores, 123 - Centro"
                     value="{{ usuario.cliente.endereco if usuario.cliente else '' }}"
@@ -36,12 +36,12 @@
             </div>
 
             <form class="hero-input-wrapper" onsubmit="event.preventDefault(); precificarRapido();">
-                <label for="hero-servico" class="sr-only">Descreva o servico</label>
+                <label for="hero-servico" class="sr-only">Descreva o serviço</label>
                 <input type="text" id="hero-servico" class="hero-input"
-                    placeholder="Ex: Trocar resistencia do chuveiro 220v"
+                    placeholder="Ex: Trocar resistência do chuveiro 220v"
                     autocomplete="off">
                 <button type="submit" id="hero-btn" class="hero-btn">
-                    <i class="fi fi-rr-search" aria-hidden="true"></i> Buscar preco
+                    <i class="fi fi-rr-search" aria-hidden="true"></i> Buscar preço
                 </button>
             </form>
 
@@ -57,13 +57,13 @@
             </div>
 
             <label class="hero-urgente">
-                <input type="checkbox" id="hero-urgente"> Urgente (acrescimo de 35%)
+                <input type="checkbox" id="hero-urgente"> Urgente (acréscimo de 35%)
             </label>
         </div>
 
         <!-- Resultado do preco -->
-        <div id="price-result" class="price-result" role="region" aria-label="Resultado da precificacao" aria-live="polite">
-            <h3 class="price-result-title">Preco fechado</h3>
+        <div id="price-result" class="price-result" role="region" aria-label="Resultado da precificação" aria-live="polite">
+            <h3 class="price-result-title">Preço fechado</h3>
             <div class="price-single">
                 <span id="price-value" class="price-value-big">R$ 0</span>
             </div>
@@ -91,7 +91,7 @@
 
         <!-- Profissionais encontrados -->
         <div id="profissionais-result" class="profissionais-result" style="display:none">
-            <h3 class="price-result-title">Profissionais disponiveis</h3>
+            <h3 class="price-result-title">Profissionais disponíveis</h3>
             <div id="profissionais-grid" class="pro-grid"></div>
         </div>
 
@@ -99,20 +99,20 @@
         <div id="confirmacao-result" class="confirmacao-box" style="display:none">
             <i class="fi fi-rr-check-circle" style="font-size:2.5rem;color:var(--success)"></i>
             <h3>Profissional escolhido!</h3>
-            <p>Aguarde o contato do profissional. Voce recebera uma notificacao quando ele confirmar.</p>
+            <p>Aguarde o contato do profissional. Você receberá uma notificação quando ele confirmar.</p>
         </div>
 
         {% else %}
         <!-- HERO VISITANTE -->
-        <h1 id="hero-heading">Contrate servicos<br>para sua casa com<br><span class="hero-highlight">preco justo</span></h1>
-        <p>Diga o que precisa, receba o preco na hora e escolha entre profissionais avaliados por quem ja contratou.</p>
+        <h1 id="hero-heading">Contrate serviços<br>para sua casa com<br><span class="hero-highlight">preço justo</span></h1>
+        <p>Diga o que precisa, receba o preço na hora e escolha entre profissionais avaliados por quem já contratou.</p>
 
-        <form class="hero-input-wrapper" onsubmit="event.preventDefault(); precificarRapido();" role="search" aria-label="Precificar servico">
-            <label for="hero-servico" class="sr-only">Descreva o servico</label>
+        <form class="hero-input-wrapper" onsubmit="event.preventDefault(); precificarRapido();" role="search" aria-label="Precificar serviço">
+            <label for="hero-servico" class="sr-only">Descreva o serviço</label>
             <input type="text" id="hero-servico" class="hero-input"
-                placeholder="Ex: Trocar resistencia do chuveiro 220v"
+                placeholder="Ex: Trocar resistência do chuveiro 220v"
                 autocomplete="off"
-                aria-label="Descreva o servico que voce precisa">
+                aria-label="Descreva o serviço que você precisa">
             <button type="submit" id="hero-btn" class="hero-btn">
                 <i class="fi fi-rr-search" aria-hidden="true"></i> Precificar
             </button>
@@ -129,8 +129,8 @@
             </div>
         </div>
 
-        <div id="price-result" class="price-result" role="region" aria-label="Resultado da precificacao" aria-live="polite">
-            <h3 class="price-result-title">Preco fechado</h3>
+        <div id="price-result" class="price-result" role="region" aria-label="Resultado da precificação" aria-live="polite">
+            <h3 class="price-result-title">Preço fechado</h3>
             <div class="price-single">
                 <span id="price-value" class="price-value-big">R$ 0</span>
             </div>
@@ -159,7 +159,7 @@
         <div class="hero-stats" aria-label="Destaques da plataforma">
             <div class="hero-stat">
                 <div class="hero-stat-number"><i class="fi fi-rr-bolt" aria-hidden="true"></i></div>
-                <div class="hero-stat-label">Todo tipo de servico</div>
+                <div class="hero-stat-label">Todo tipo de serviço</div>
             </div>
             <div class="hero-stat">
                 <div class="hero-stat-number"><i class="fi fi-rr-shield-check" aria-hidden="true"></i></div>
@@ -167,7 +167,7 @@
             </div>
             <div class="hero-stat">
                 <div class="hero-stat-number"><i class="fi fi-rr-calculator" aria-hidden="true"></i></div>
-                <div class="hero-stat-label">Preco justo na hora</div>
+                <div class="hero-stat-label">Preço justo na hora</div>
             </div>
         </div>
     </div>
@@ -176,8 +176,8 @@
 
 <!-- CATEGORIES -->
 <section class="section" aria-labelledby="categories">
-    <h2 class="section-title reveal" id="categories">Categorias disponiveis</h2>
-    <p class="section-subtitle reveal reveal-delay-1">Escolha o tipo de servico que voce precisa</p>
+    <h2 class="section-title reveal" id="categories">Categorias disponíveis</h2>
+    <p class="section-subtitle reveal reveal-delay-1">Escolha o tipo de serviço que você precisa</p>
 
     <div class="cat-grid">
         <a href="/profissionais?cat=eletrica" class="cat-card reveal reveal-delay-1">
@@ -185,8 +185,8 @@
                 <i class="fi fi-rr-bolt"></i>
             </div>
             <div>
-                <h3>Eletrica</h3>
-                <p>Chuveiros, tomadas, iluminacao</p>
+                <h3>Elétrica</h3>
+                <p>Chuveiros, tomadas, iluminação</p>
             </div>
         </a>
         <a href="/profissionais?cat=hidraulica" class="cat-card reveal reveal-delay-2">
@@ -194,7 +194,7 @@
                 <i class="fi fi-rr-faucet-drip"></i>
             </div>
             <div>
-                <h3>Hidraulica</h3>
+                <h3>Hidráulica</h3>
                 <p>Vazamentos, torneiras, encanamento</p>
             </div>
         </a>
@@ -204,7 +204,7 @@
             </div>
             <div>
                 <h3>Jardinagem</h3>
-                <p>Poda, plantio, manutencao de jardim</p>
+                <p>Poda, plantio, manutenção de jardim</p>
             </div>
         </a>
         <a href="/profissionais?cat=pintura" class="cat-card reveal reveal-delay-4">
@@ -222,7 +222,7 @@
             </div>
             <div>
                 <h3>Montagem e Reparos</h3>
-                <p>Moveis, prateleiras, pequenos reparos</p>
+                <p>Móveis, prateleiras, pequenos reparos</p>
             </div>
         </a>
         <a href="/profissionais?cat=organizacao" class="cat-card reveal reveal-delay-6">
@@ -230,8 +230,8 @@
                 <i class="fi fi-rr-boxes"></i>
             </div>
             <div>
-                <h3>Organizacao</h3>
-                <p>Closets, despensa, mudanca</p>
+                <h3>Organização</h3>
+                <p>Closets, despensa, mudança</p>
             </div>
         </a>
         <a href="/profissionais?cat=costura" class="cat-card reveal reveal-delay-1">
@@ -258,7 +258,7 @@
             </div>
             <div>
                 <h3>Limpeza e Faxina</h3>
-                <p>Residencial, pos-obra, vidros</p>
+                <p>Residencial, pós-obra, vidros</p>
             </div>
         </a>
     </div>
@@ -268,7 +268,7 @@
 <div class="section-bg">
 <section class="section" aria-labelledby="how-it-works">
     <h2 class="section-title reveal" id="how-it-works">Como funciona</h2>
-    <p class="section-subtitle reveal reveal-delay-1">Resolve qualquer servico em 4 passos</p>
+    <p class="section-subtitle reveal reveal-delay-1">Resolve qualquer serviço em 4 passos</p>
 
     <div class="steps-grid">
         <div class="step-card reveal reveal-delay-1">
@@ -278,18 +278,18 @@
         </div>
         <div class="step-card reveal reveal-delay-2">
             <div class="step-number" aria-hidden="true">2</div>
-            <h3>Receba o preco</h3>
-            <p>O sistema analisa regiao, complexidade e tipo de servico para calcular uma faixa de preco justa.</p>
+            <h3>Receba o preço</h3>
+            <p>O sistema analisa região, complexidade e tipo de serviço para calcular uma faixa de preço justa.</p>
         </div>
         <div class="step-card reveal reveal-delay-3">
             <div class="step-number" aria-hidden="true">3</div>
             <h3>Escolha o profissional</h3>
-            <p>Veja o score, avaliacoes e historico de cada profissional antes de decidir.</p>
+            <p>Veja o score, avaliações e histórico de cada profissional antes de decidir.</p>
         </div>
         <div class="step-card reveal reveal-delay-4">
             <div class="step-number" aria-hidden="true">4</div>
             <h3>Avalie depois</h3>
-            <p>Apos o servico, avalie o profissional. O score dele sobe ou desce com base no seu feedback.</p>
+            <p>Após o serviço, avalie o profissional. O score dele sobe ou desce com base no seu feedback.</p>
         </div>
     </div>
 </section>
@@ -316,7 +316,7 @@
             </div>
             <div>
                 <h3>Pagamento seguro</h3>
-                <p>O valor fica retido ate a conclusao do servico. Se nao for realizado, voce recebe de volta.</p>
+                <p>O valor fica retido até a conclusão do serviço. Se não for realizado, você recebe de volta.</p>
             </div>
         </div>
         <div class="feature-card reveal reveal-delay-3">
@@ -324,8 +324,8 @@
                 <i class="fi fi-rr-brain-circuit"></i>
             </div>
             <div>
-                <h3>Preco calculado</h3>
-                <p>A faixa de preco e definida com base na regiao, tipo de servico e complexidade. Sem surpresas.</p>
+                <h3>Preço calculado</h3>
+                <p>A faixa de preço é definida com base na região, tipo de serviço e complexidade. Sem surpresas.</p>
             </div>
         </div>
         <div class="feature-card reveal reveal-delay-4">
@@ -334,7 +334,7 @@
             </div>
             <div>
                 <h3>Score de 0 a 1000</h3>
-                <p>Cada profissional tem um score publico baseado em pontualidade, qualidade e feedback dos clientes.</p>
+                <p>Cada profissional tem um score público baseado em pontualidade, qualidade e feedback dos clientes.</p>
             </div>
         </div>
     </div>
@@ -344,7 +344,7 @@
 <div class="section-bg">
 <section class="section" aria-labelledby="trust-heading">
     <h2 class="section-title reveal" id="trust-heading">Pode confiar</h2>
-    <p class="section-subtitle reveal reveal-delay-1">Profissionais verificados, qualificados e disponiveis para voce</p>
+    <p class="section-subtitle reveal reveal-delay-1">Profissionais verificados, qualificados e disponíveis para você</p>
 
     <div class="trust-grid">
         <div class="trust-card reveal reveal-delay-1">
@@ -378,10 +378,10 @@
 <!-- CTA -->
 <div style="padding:0 2rem 5rem;margin-top:-1rem">
     <section class="cta-section reveal" aria-labelledby="cta-heading">
-        <h2 id="cta-heading">Pronto para comecar?</h2>
-        <p>Faca uma cotacao agora mesmo - e gratis e sem compromisso</p>
+        <h2 id="cta-heading">Pronto para começar?</h2>
+        <p>Faça uma cotação agora mesmo - é grátis e sem compromisso</p>
         <a href="/solicitar" class="btn btn-primary" style="display:inline-flex;width:auto;padding:0.85rem 2.5rem;font-size:1.05rem">
-            <i class="fi fi-rr-rocket" aria-hidden="true"></i> Solicitar servico
+            <i class="fi fi-rr-rocket" aria-hidden="true"></i> Solicitar serviço
         </a>
     </section>
 </div>

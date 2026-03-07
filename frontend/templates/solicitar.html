@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Solicitar Servico{% endblock %}
+{% block title %}Solicitar Serviço{% endblock %}
 
 {% block content %}
 <section class="section" aria-labelledby="solicitar-heading">
-    <h2 class="section-title" id="solicitar-heading">Solicitar Servico</h2>
-    <p class="section-subtitle">Descreva o que precisa e veja quanto custa antes de contratar</p>
+    <h2 class="section-title" id="solicitar-heading">Solicitar Serviço</h2>
+    <p class="section-subtitle">Descreva o que você precisa e veja quanto custa antes de contratar</p>
 
     <div class="form-container">
         <form onsubmit="solicitarServico(event)" novalidate>
             <div class="form-group">
                 <label for="descricao">
-                    <i class="fi fi-rr-document" aria-hidden="true"></i> O que voce precisa? *
+                    <i class="fi fi-rr-document" aria-hidden="true"></i> O que você precisa? *
                 </label>
                 <textarea id="descricao" name="descricao" required
-                    placeholder="Descreva o servico com detalhes. Ex: Trocar a resistencia do chuveiro 220v no banheiro. O chuveiro e Lorenzetti e esta esquentando pouco."
+                    placeholder="Descreva o serviço com detalhes. Ex: Trocar a resistência do chuveiro 220v no banheiro. O chuveiro é Lorenzetti e está esquentando pouco."
                     aria-required="true"></textarea>
             </div>
 
@@ -47,13 +47,13 @@
                     <label for="bairro">
                         <i class="fi fi-rr-marker" aria-hidden="true"></i> Bairro
                     </label>
-                    <input type="text" id="bairro" name="bairro" placeholder="Ex: Moema, Pinheiros, Tatuape">
+                    <input type="text" id="bairro" name="bairro" placeholder="Ex: Moema, Pinheiros, Tatuapé">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="endereco">
-                    <i class="fi fi-rr-home" aria-hidden="true"></i> Endereco
+                    <i class="fi fi-rr-home" aria-hidden="true"></i> Endereço
                 </label>
                 <input type="text" id="endereco" name="endereco" placeholder="Rua, numero, complemento"
                     autocomplete="street-address">
@@ -63,13 +63,13 @@
                 <div class="checkbox-group">
                     <input type="checkbox" id="urgente" name="urgente">
                     <label for="urgente">
-                        <i class="fi fi-rr-clock" aria-hidden="true"></i> Servico URGENTE (acrescimo de 35%)
+                        <i class="fi fi-rr-clock" aria-hidden="true"></i> Serviço URGENTE (acréscimo de 35%)
                     </label>
                 </div>
             </div>
 
             <button type="submit" class="btn btn-primary">
-                <i class="fi fi-rr-check" aria-hidden="true"></i> Solicitar Servico
+                <i class="fi fi-rr-check" aria-hidden="true"></i> Solicitar Serviço
             </button>
         </form>
     </div>

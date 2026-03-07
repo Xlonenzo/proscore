@@ -59,7 +59,7 @@ function showToast(message, type = 'info', duration = 4000) {
     toast.innerHTML = `
         ${icons[type] || icons.info}
         <span>${message}</span>
-        <button class="toast-close" aria-label="Fechar notificacao">&times;</button>
+        <button class="toast-close" aria-label="Fechar notificação">&times;</button>
     `;
 
     container.appendChild(toast);
@@ -89,7 +89,7 @@ async function apiCall(endpoint, options = {}) {
         const response = await fetch(url, config);
         const data = await response.json();
         if (!response.ok) {
-            throw new Error(data.detail || 'Erro na requisicao');
+            throw new Error(data.detail || 'Erro na requisição');
         }
         return data;
     } catch (error) {
@@ -106,7 +106,7 @@ function previewFoto(input) {
     const file = input.files[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-        showToast('Foto muito grande. Maximo 5MB.', 'error');
+        showToast('Foto muito grande. Máximo 5MB.', 'error');
         input.value = '';
         return;
     }
@@ -138,7 +138,7 @@ async function precificarRapido() {
     const descricao = input.value.trim();
     if (!descricao) {
         input.focus();
-        showToast('Digite o servico que voce precisa.', 'info');
+        showToast('Digite o serviço que você precisa.', 'info');
         return;
     }
 
@@ -183,10 +183,10 @@ async function precificarRapido() {
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (error) {
         console.error('Precificar error:', error);
-        showToast('Erro ao precificar: ' + (error.message || 'Tente novamente'), 'error');
+        showToast('Erro ao precificar: ' + (error.message || 'Tente novamente.'), 'error');
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fi fi-rr-search" aria-hidden="true"></i> Buscar preco';
+        btn.innerHTML = '<i class="fi fi-rr-search" aria-hidden="true"></i> Buscar preço';
     }
 }
 
@@ -216,7 +216,7 @@ async function salvarEndereco() {
         // Update data attributes to prevent re-saving
         form.dataset.endereco = endereco;
         form.dataset.bairro = bairro;
-        showToast('Endereco salvo!', 'success', 2000);
+        showToast('Endereço salvo!', 'success', 2000);
     } catch (error) {
         // Silent fail - address save is not critical
         console.error('Erro ao salvar endereco:', error);
@@ -228,7 +228,7 @@ async function salvarEndereco() {
 async function aceitarEBuscar() {
     const descricao = _lastDescricao || document.getElementById('hero-servico')?.value?.trim();
     if (!descricao) {
-        showToast('Primeiro busque o preco do servico.', 'info');
+        showToast('Primeiro busque o preço do serviço.', 'info');
         return;
     }
 
@@ -276,15 +276,15 @@ async function aceitarEBuscar() {
                         </div>
                         <div class="pro-stats">
                             <div class="pro-stat">
-                                <div class="label">Avaliacao</div>
+                                <div class="label">Avaliação</div>
                                 <div class="value">${prof.avaliacao_media.toFixed(1)}</div>
                             </div>
                             <div class="pro-stat">
-                                <div class="label">Servicos</div>
+                                <div class="label">Serviços</div>
                                 <div class="value">${prof.total_servicos}</div>
                             </div>
                             <div class="pro-stat">
-                                <div class="label">Conclusao</div>
+                                <div class="label">Conclusão</div>
                                 <div class="value">${prof.taxa_conclusao.toFixed(0)}%</div>
                             </div>
                         </div>
@@ -302,11 +302,11 @@ async function aceitarEBuscar() {
             profDiv.style.display = 'block';
             profDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
-            grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:2rem">Nenhum profissional disponivel para esta categoria no momento.</p>';
+            grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:2rem">Nenhum profissional disponível para esta categoria no momento.</p>';
             profDiv.style.display = 'block';
         }
 
-        showToast('Solicitacao criada! Escolha seu profissional.', 'success');
+        showToast('Solicitação criada! Escolha seu profissional.', 'success');
     } catch (error) {
         showToast(error.message || 'Erro ao buscar profissionais.', 'error');
     } finally {
@@ -365,10 +365,10 @@ async function solicitarServico(event) {
 
         let html = `
             <div class="alert alert-success">
-                Solicitacao #${data.solicitacao_id} criada com sucesso!
+                Solicitação #${data.solicitacao_id} criada com sucesso!
             </div>
             <div class="price-result show" style="display:block">
-                <h3 class="price-result-title">Preco fechado</h3>
+                <h3 class="price-result-title">Preço fechado</h3>
                 <div class="price-single">
                     <span class="price-value-big">R$ ${p.preco.toFixed(0)}</span>
                 </div>
@@ -386,7 +386,7 @@ async function solicitarServico(event) {
         `;
 
         if (data.profissionais_disponiveis && data.profissionais_disponiveis.length > 0) {
-            html += `<h3 style="margin: 2rem 0 1rem; text-align:center">Profissionais Disponiveis</h3>`;
+            html += `<h3 style="margin: 2rem 0 1rem; text-align:center">Profissionais Disponíveis</h3>`;
             html += `<div class="pro-grid">`;
             for (const prof of data.profissionais_disponiveis) {
                 const scoreClass = getScoreClass(prof.score);
@@ -404,16 +404,16 @@ async function solicitarServico(event) {
                         </div>
                         <div class="pro-stats">
                             <div class="pro-stat">
-                                <div class="label">Avaliacao</div>
+                                <div class="label">Avaliação</div>
                                 <div class="value">${prof.avaliacao_media.toFixed(1)}</div>
                             </div>
                             <div class="pro-stat">
-                                <div class="label">Servicos</div>
+                                <div class="label">Serviços</div>
                                 <div class="value">${prof.total_servicos}</div>
                             </div>
                             <div class="pro-stat">
                                 <div class="label">Verificado</div>
-                                <div class="value">${prof.documento_verificado ? 'Sim' : 'Nao'}</div>
+                                <div class="value">${prof.documento_verificado ? 'Sim' : 'Não'}</div>
                             </div>
                         </div>
                     </a>
@@ -424,10 +424,10 @@ async function solicitarServico(event) {
 
         resultDiv.innerHTML = html;
         resultDiv.scrollIntoView({ behavior: 'smooth' });
-        showToast('Solicitacao enviada com sucesso!', 'success');
+        showToast('Solicitação enviada com sucesso!', 'success');
     } catch (error) {
         resultDiv.innerHTML = `<div class="alert alert-error">Erro: ${error.message}</div>`;
-        showToast('Erro ao enviar solicitacao.', 'error');
+        showToast('Erro ao enviar solicitação.', 'error');
     } finally {
         btn.disabled = false;
         btn.textContent = 'Solicitar Servico';
@@ -456,7 +456,7 @@ async function carregarProfissionais(categoria = '', regiao = '') {
             container.innerHTML = `
                 <div style="text-align:center;padding:3rem 1rem;grid-column:1/-1">
                     <p style="color:var(--text-muted);font-size:1.1rem;margin-bottom:0.5rem">Nenhum profissional encontrado</p>
-                    <p style="color:var(--text-muted);font-size:0.9rem">Tente outra categoria ou remova os filtros</p>
+                    <p style="color:var(--text-muted);font-size:0.9rem">Tente outra categoria ou remova os filtros.</p>
                 </div>`;
             return;
         }
@@ -482,15 +482,15 @@ async function carregarProfissionais(categoria = '', regiao = '') {
                     </div>
                     <div class="pro-stats">
                         <div class="pro-stat">
-                            <div class="label">Avaliacao</div>
+                            <div class="label">Avaliação</div>
                             <div class="value">${prof.avaliacao_media.toFixed(1)}</div>
                         </div>
                         <div class="pro-stat">
-                            <div class="label">Servicos</div>
+                            <div class="label">Serviços</div>
                             <div class="value">${prof.total_servicos}</div>
                         </div>
                         <div class="pro-stat">
-                            <div class="label">Conclusao</div>
+                            <div class="label">Conclusão</div>
                             <div class="value">${prof.taxa_conclusao.toFixed(0)}%</div>
                         </div>
                     </div>
@@ -535,15 +535,15 @@ async function carregarProfissionalDetalhe(id) {
 
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:2rem">
                         <div class="price-detail-item">
-                            <div class="label">Total Servicos</div>
+                            <div class="label">Total Serviços</div>
                             <div class="value">${data.total_servicos}</div>
                         </div>
                         <div class="price-detail-item">
-                            <div class="label">Taxa Conclusao</div>
+                            <div class="label">Taxa Conclusão</div>
                             <div class="value">${data.taxa_conclusao.toFixed(0)}%</div>
                         </div>
                         <div class="price-detail-item">
-                            <div class="label">Tempo Medio</div>
+                            <div class="label">Tempo Médio</div>
                             <div class="value">${formatarTempo(data.tempo_medio_min)}</div>
                         </div>
                         <div class="price-detail-item">
@@ -579,9 +579,9 @@ async function carregarProfissionalDetalhe(id) {
         const breakdown = s.detalhamento;
         const labels = {
             pontualidade: 'Pontualidade',
-            avaliacao: 'Avaliacao Media',
-            reclamacoes: 'Sem Reclamacoes',
-            frequencia: 'Frequencia de Uso',
+            avaliacao: 'Avaliação Media',
+            reclamacoes: 'Sem Reclamações',
+            frequencia: 'Frequência de Uso',
             recorrencia: 'Clientes Recorrentes',
             compliance: 'Conformidade',
         };
@@ -630,11 +630,11 @@ async function carregarDashboard() {
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">${data.total_solicitacoes}</div>
-                    <div class="stat-label">Solicitacoes</div>
+                    <div class="stat-label">Solicitações</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">${data.total_concluidos}</div>
-                    <div class="stat-label">Concluidos</div>
+                    <div class="stat-label">Concluídos</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">${data.total_pendentes}</div>
@@ -768,13 +768,13 @@ async function registrarCliente(event) {
     const bairro = form.bairro ? form.bairro.value.trim() : '';
 
     if (!nome || !email || !senha || !telefone) {
-        alertEl.textContent = 'Preencha todos os campos obrigatorios.';
+        alertEl.textContent = 'Preencha todos os campos obrigatórios.';
         alertEl.style.display = 'flex';
         return;
     }
 
     if (senha.length < 6) {
-        alertEl.textContent = 'A senha deve ter no minimo 6 caracteres.';
+        alertEl.textContent = 'A senha deve ter no mínimo 6 caracteres.';
         alertEl.style.display = 'flex';
         return;
     }
@@ -816,13 +816,13 @@ async function registrarPrestador(event) {
     const regiao = form.regiao ? form.regiao.value.trim() : 'Sao Paulo';
 
     if (!nome || !email || !senha || !telefone || !cpf || !categoria) {
-        alertEl.textContent = 'Preencha todos os campos obrigatorios.';
+        alertEl.textContent = 'Preencha todos os campos obrigatórios.';
         alertEl.style.display = 'flex';
         return;
     }
 
     if (senha.length < 6) {
-        alertEl.textContent = 'A senha deve ter no minimo 6 caracteres.';
+        alertEl.textContent = 'A senha deve ter no mínimo 6 caracteres.';
         alertEl.style.display = 'flex';
         return;
     }

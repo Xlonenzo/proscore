@@ -4,7 +4,7 @@
 <section class="section" style="min-height:70vh;display:flex;align-items:center;justify-content:center">
     <div class="form-container" style="max-width:440px">
         <h2 style="text-align:center;margin-bottom:0.5rem;font-size:1.75rem;font-weight:800">Esqueceu sua senha?</h2>
-        <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;font-size:0.9rem">Informe seu email para receber instrucoes de redefinicao</p>
+        <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;font-size:0.9rem">Informe seu email para receber instruções de redefinição</p>
 
         <div id="reset-alert" class="alert" style="display:none" role="alert"></div>
 
@@ -15,7 +15,7 @@
                     <input type="email" id="reset-email" required autocomplete="email" placeholder="seu@email.com" aria-required="true">
                 </div>
                 <button type="submit" class="btn btn-primary" id="reset-btn">
-                    <i class="fi fi-rr-key" aria-hidden="true"></i> Enviar instrucoes
+                    <i class="fi fi-rr-key" aria-hidden="true"></i> Enviar instruções
                 </button>
             </form>
         </div>
@@ -23,7 +23,7 @@
         <div id="form-nova-senha" style="display:none">
             <form onsubmit="redefinirSenha(event)" novalidate>
                 <div class="form-group">
-                    <label for="reset-token"><i class="fi fi-rr-key" aria-hidden="true"></i> Token de redefinicao</label>
+                    <label for="reset-token"><i class="fi fi-rr-key" aria-hidden="true"></i> Token de redefinição</label>
                     <input type="text" id="reset-token" required placeholder="Cole o token recebido" aria-required="true">
                 </div>
                 <div class="form-group">
@@ -78,7 +78,7 @@ async function solicitarReset(event) {
         alertEl.style.display = 'flex';
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fi fi-rr-key" aria-hidden="true"></i> Enviar instrucoes';
+        btn.innerHTML = '<i class="fi fi-rr-key" aria-hidden="true"></i> Enviar instruções';
     }
 }
 
@@ -97,7 +97,7 @@ async function redefinirSenha(event) {
     }
 
     if (novaSenha.length < 6) {
-        alertEl.textContent = 'A senha deve ter no minimo 6 caracteres.';
+        alertEl.textContent = 'A senha deve ter no mínimo 6 caracteres.';
         alertEl.className = 'alert alert-error';
         alertEl.style.display = 'flex';
         return;
@@ -116,7 +116,7 @@ async function redefinirSenha(event) {
         alertEl.style.display = 'flex';
         setTimeout(() => window.location.href = '/login', 2000);
     } catch (error) {
-        alertEl.textContent = error.message || 'Token invalido ou expirado';
+        alertEl.textContent = error.message || 'Token inválido ou expirado';
         alertEl.className = 'alert alert-error';
         alertEl.style.display = 'flex';
     } finally {
