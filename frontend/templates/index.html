@@ -45,6 +45,17 @@
                 </button>
             </form>
 
+            <div class="hero-foto-row" style="margin-top:0.5rem">
+                <label for="hero-foto" style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--text-secondary);font-size:0.85rem;padding:0.5rem 0">
+                    <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto do local (opcional - melhora a precisao)
+                </label>
+                <input type="file" id="hero-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
+                <div id="hero-foto-preview" style="display:none;margin-top:0.5rem;position:relative">
+                    <img id="hero-foto-img" style="max-height:120px;border-radius:8px;border:1px solid var(--border)">
+                    <button type="button" onclick="removerFoto()" style="position:absolute;top:-8px;right:-8px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">&times;</button>
+                </div>
+            </div>
+
             <label class="hero-urgente">
                 <input type="checkbox" id="hero-urgente"> Urgente (acrescimo de 35%)
             </label>
@@ -106,6 +117,17 @@
                 <i class="fi fi-rr-search" aria-hidden="true"></i> Precificar
             </button>
         </form>
+
+        <div class="hero-foto-row" style="margin-top:0.5rem">
+            <label for="hero-foto" style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--text-secondary);font-size:0.85rem;padding:0.5rem 0">
+                <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto do local (opcional - melhora a precisao)
+            </label>
+            <input type="file" id="hero-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
+            <div id="hero-foto-preview" style="display:none;margin-top:0.5rem;position:relative">
+                <img id="hero-foto-img" style="max-height:120px;border-radius:8px;border:1px solid var(--border)">
+                <button type="button" onclick="removerFoto()" style="position:absolute;top:-8px;right:-8px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">&times;</button>
+            </div>
+        </div>
 
         <div id="price-result" class="price-result" role="region" aria-label="Resultado da precificacao" aria-live="polite">
             <h3 class="price-result-title">Preco fechado</h3>

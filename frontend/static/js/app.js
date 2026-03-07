@@ -98,6 +98,33 @@ async function apiCall(endpoint, options = {}) {
     }
 }
 
+// ====== Photo Upload for Pricing ======
+
+let _fotoBase64 = null;
+
+function previewFoto(input) {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+        showToast('Foto muito grande. Maximo 5MB.', 'error');
+        input.value = '';
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        _fotoBase64 = e.target.result.split(',')[1]; // Remove data:image/...;base64, prefix
+        document.getElementById('hero-foto-img').src = e.target.result;
+        document.getElementById('hero-foto-preview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+
+function removerFoto() {
+    _fotoBase64 = null;
+    document.getElementById('hero-foto').value = '';
+    document.getElementById('hero-foto-preview').style.display = 'none';
+}
+
 // ====== Precificacao Rapida (Hero) ======
 
 // Store last pricing data for the "aceitar" flow
@@ -134,6 +161,7 @@ async function precificarRapido() {
                 descricao: descricao,
                 regiao: regiao,
                 urgente: urgente,
+                foto_base64: _fotoBase64 || null,
             }),
         });
 

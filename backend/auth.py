@@ -32,6 +32,13 @@ def criar_token(data: dict) -> str:
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
+def criar_token_reset(data: dict) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(hours=1)
+    to_encode.update({"exp": expire, "tipo": "reset"})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+
 def _extract_token(request: Request) -> Optional[str]:
     """Extract token from cookie (web) or Authorization header (mobile)."""
     token = request.cookies.get(COOKIE_NAME)

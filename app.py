@@ -114,6 +114,11 @@ async def pagina_cadastro_prestador(request: Request, db: Session = Depends(get_
     return templates.TemplateResponse("cadastro_prestador.html", _ctx(request, db))
 
 
+@app.get("/esqueceu-senha", response_class=HTMLResponse)
+async def pagina_esqueceu_senha(request: Request, db: Session = Depends(get_db)):
+    return templates.TemplateResponse("esqueceu_senha.html", _ctx(request, db))
+
+
 # ======== Admin Pages ========
 
 

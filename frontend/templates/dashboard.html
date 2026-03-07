@@ -1,117 +1,261 @@
 {% extends "base.html" %}
-
 {% block title %}Dashboard{% endblock %}
-
 {% block content %}
 <section class="section" aria-labelledby="dashboard-heading">
-    <h2 class="section-title" id="dashboard-heading">Dashboard</h2>
-    <p class="section-subtitle">Visao geral da plataforma</p>
-
-    <div id="dashboard-content" aria-live="polite">
-        <div class="loading show" role="status">
-            <div class="spinner"></div>
-            <p>Carregando dados...</p>
-        </div>
-    </div>
-
-    <!-- Simulador de Score -->
-    <div class="form-container" style="max-width:600px;margin-top:3rem" aria-labelledby="simulator-heading">
-        <h3 id="simulator-heading" style="text-align:center;margin-bottom:0.5rem;font-size:1.15rem">
-            <i class="fi fi-rr-chart-pie-alt" aria-hidden="true"></i> Simulador de Score
-        </h3>
-        <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;font-size:0.9rem">
-            Veja como cada fator influencia o score final de um profissional
-        </p>
-
-        <div class="form-group">
-            <label for="sim-pontualidade">
-                <i class="fi fi-rr-clock" aria-hidden="true"></i>
-                Pontualidade: <strong id="val-pont">100</strong>%
-            </label>
-            <input type="range" id="sim-pontualidade" min="0" max="100" value="100" oninput="simularScore()" style="width:100%">
-        </div>
-        <div class="form-group">
-            <label for="sim-avaliacao">
-                <i class="fi fi-rr-star" aria-hidden="true"></i>
-                Avaliacao Media: <strong id="val-aval">5.0</strong>
-            </label>
-            <input type="range" id="sim-avaliacao" min="0" max="50" value="50" oninput="simularScore()" style="width:100%">
-        </div>
-        <div class="form-group">
-            <label for="sim-reclamacao">
-                <i class="fi fi-rr-flag" aria-hidden="true"></i>
-                Taxa Reclamacao: <strong id="val-recl">0</strong>%
-            </label>
-            <input type="range" id="sim-reclamacao" min="0" max="100" value="0" oninput="simularScore()" style="width:100%">
-        </div>
-        <div class="form-group">
-            <label for="sim-frequencia">
-                <i class="fi fi-rr-chart-histogram" aria-hidden="true"></i>
-                Frequencia de Uso: <strong id="val-freq">50</strong>%
-            </label>
-            <input type="range" id="sim-frequencia" min="0" max="100" value="50" oninput="simularScore()" style="width:100%">
-        </div>
-        <div class="form-group">
-            <label for="sim-recorrencia">
-                <i class="fi fi-rr-rotate-right" aria-hidden="true"></i>
-                Recorrencia: <strong id="val-recc">50</strong>%
-            </label>
-            <input type="range" id="sim-recorrencia" min="0" max="100" value="50" oninput="simularScore()" style="width:100%">
-        </div>
-        <div class="form-group">
-            <label for="sim-compliance">
-                <i class="fi fi-rr-shield-check" aria-hidden="true"></i>
-                Compliance: <strong id="val-comp">100</strong>%
-            </label>
-            <input type="range" id="sim-compliance" min="0" max="100" value="100" oninput="simularScore()" style="width:100%">
-        </div>
-
-        <div id="sim-result" style="text-align:center;margin-top:1.5rem">
-            <div class="score-meter" style="--score-pct: 80;width:150px;height:150px" role="img" aria-label="Score simulado">
-                <div class="score-meter-circle">
-                    <div class="score-meter-inner" style="width:120px;height:120px">
-                        <div id="sim-score-value" class="score-meter-value" style="font-size:2rem">800</div>
-                        <div id="sim-score-nivel" class="score-meter-label">OURO</div>
-                    </div>
-                </div>
+    {% if usuario and usuario.tipo == 'prestador' %}
+    <!-- PRESTADOR DASHBOARD -->
+    <div id="prestador-dashboard">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+            <div>
+                <h2 class="section-title" id="dashboard-heading" style="margin-bottom:0.25rem">Painel do Prestador</h2>
+                <p class="section-subtitle" style="margin-bottom:0">Gerencie seus servicos e acompanhe seus ganhos</p>
             </div>
+            <button id="btn-online" class="btn btn-secondary" onclick="toggleOnline()" style="width:auto;padding:0.6rem 1.5rem">
+                <i class="fi fi-rr-signal-alt" aria-hidden="true"></i> <span id="online-text">Carregando...</span>
+            </button>
         </div>
+
+        <!-- Stats cards -->
+        <div id="prestador-stats" class="dashboard-stats" aria-live="polite">
+            <div class="loading show"><div class="spinner"></div><p>Carregando...</p></div>
+        </div>
+
+        <!-- Tabs -->
+        <div style="display:flex;gap:0.5rem;margin:2rem 0 1rem;flex-wrap:wrap">
+            <button class="btn btn-secondary tab-active" id="tab-disponiveis" onclick="showTab('disponiveis')" style="width:auto;padding:0.5rem 1.25rem;font-size:0.85rem">
+                <i class="fi fi-rr-bell" aria-hidden="true"></i> Disponiveis
+            </button>
+            <button class="btn btn-secondary" id="tab-meus" onclick="showTab('meus')" style="width:auto;padding:0.5rem 1.25rem;font-size:0.85rem">
+                <i class="fi fi-rr-list" aria-hidden="true"></i> Meus Servicos
+            </button>
+        </div>
+
+        <div id="tab-content-disponiveis" aria-live="polite">
+            <div class="loading show"><div class="spinner"></div><p>Buscando servicos...</p></div>
+        </div>
+        <div id="tab-content-meus" style="display:none" aria-live="polite"></div>
     </div>
+
+    {% else %}
+    <!-- CLIENTE DASHBOARD -->
+    <h2 class="section-title" id="dashboard-heading">Meu Painel</h2>
+    <p class="section-subtitle">Acompanhe seus servicos</p>
+
+    <div id="cliente-solicitacoes" aria-live="polite">
+        <div class="loading show"><div class="spinner"></div><p>Carregando...</p></div>
+    </div>
+    {% endif %}
 </section>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    carregarDashboard();
+{% if usuario and usuario.tipo == 'prestador' %}
+// ====== Prestador Dashboard ======
+let _prestadorOnline = false;
 
-    async function simularScore() {
-        const pont = document.getElementById('sim-pontualidade').value;
-        const aval = (document.getElementById('sim-avaliacao').value / 10).toFixed(1);
-        const recl = document.getElementById('sim-reclamacao').value;
-        const freq = document.getElementById('sim-frequencia').value;
-        const recc = document.getElementById('sim-recorrencia').value;
-        const comp = document.getElementById('sim-compliance').value;
+async function carregarPrestadorDashboard() {
+    try {
+        const data = await apiCall('/prestador/stats');
+        _prestadorOnline = data.online;
+        updateOnlineBtn(data.online);
 
-        document.getElementById('val-pont').textContent = pont;
-        document.getElementById('val-aval').textContent = aval;
-        document.getElementById('val-recl').textContent = recl;
-        document.getElementById('val-freq').textContent = freq;
-        document.getElementById('val-recc').textContent = recc;
-        document.getElementById('val-comp').textContent = comp;
-
-        try {
-            const data = await apiCall(
-                `/score/simular?pontualidade=${pont}&avaliacao=${aval}&reclamacoes=${recl}&frequencia=${freq}&recorrencia=${recc}&compliance=${comp}`
-            );
-
-            const scorePct = (data.score / 1000) * 100;
-            document.getElementById('sim-score-value').textContent = data.score.toFixed(0);
-            document.getElementById('sim-score-value').style.color = data.cor;
-            document.getElementById('sim-score-nivel').textContent = data.nivel;
-            document.querySelector('#sim-result .score-meter').style.setProperty('--score-pct', scorePct);
-        } catch (e) {
-            // Fallback: calculate locally
-        }
+        const scoreClass = getScoreClass(data.score);
+        document.getElementById('prestador-stats').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-value" style="color:var(--cta)">${data.score.toFixed(0)}</div>
+                <div class="stat-label">Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${data.avaliacao_media.toFixed(1)}</div>
+                <div class="stat-label">Avaliacao</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${data.total_servicos}</div>
+                <div class="stat-label">Servicos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">R$ ${data.ganhos_mes.toFixed(0)}</div>
+                <div class="stat-label">Ganhos do Mes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">R$ ${data.ganhos_total.toFixed(0)}</div>
+                <div class="stat-label">Ganhos Total</div>
+            </div>
+        `;
+    } catch (e) {
+        document.getElementById('prestador-stats').innerHTML = '<p style="color:var(--danger)">Erro ao carregar stats</p>';
     }
+}
+
+function updateOnlineBtn(online) {
+    const btn = document.getElementById('btn-online');
+    const text = document.getElementById('online-text');
+    if (online) {
+        btn.style.background = 'var(--success)';
+        btn.style.color = '#fff';
+        btn.style.borderColor = 'var(--success)';
+        text.textContent = 'Online';
+    } else {
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.borderColor = '';
+        text.textContent = 'Offline';
+    }
+}
+
+async function toggleOnline() {
+    try {
+        const data = await apiCall('/prestador/online', { method: 'PUT' });
+        _prestadorOnline = data.online;
+        updateOnlineBtn(data.online);
+        showToast(data.online ? 'Voce esta online! Recebera solicitacoes.' : 'Voce esta offline.', data.online ? 'success' : 'info');
+    } catch (e) {
+        showToast('Erro ao alterar status', 'error');
+    }
+}
+
+async function carregarDisponiveis() {
+    const container = document.getElementById('tab-content-disponiveis');
+    try {
+        const data = await apiCall('/prestador/solicitacoes/disponiveis');
+        if (!data.solicitacoes.length) {
+            container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem">Nenhuma solicitacao disponivel no momento.</p>';
+            return;
+        }
+        let html = '<div class="pro-grid">';
+        for (const s of data.solicitacoes) {
+            html += `
+                <div class="pro-card" style="cursor:default">
+                    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.75rem">
+                        <span class="badge" style="background:var(--cta-bg);color:var(--cta-dark)">${capitalize(s.categoria)}</span>
+                        ${s.urgente ? '<span class="badge" style="background:var(--danger-bg);color:var(--danger)">URGENTE</span>' : ''}
+                    </div>
+                    <p style="font-size:0.9rem;margin-bottom:0.75rem;color:var(--text-primary)">${s.descricao.substring(0, 120)}${s.descricao.length > 120 ? '...' : ''}</p>
+                    <div class="pro-stats">
+                        <div class="pro-stat"><div class="label">Valor</div><div class="value">R$ ${s.preco_final.toFixed(0)}</div></div>
+                        <div class="pro-stat"><div class="label">Bairro</div><div class="value">${s.bairro || '—'}</div></div>
+                        <div class="pro-stat"><div class="label">Cliente</div><div class="value">${s.cliente_nome}</div></div>
+                    </div>
+                    <button onclick="aceitarSolicitacao(${s.id})" class="btn btn-primary" style="margin-top:0.75rem">
+                        <i class="fi fi-rr-check" aria-hidden="true"></i> Aceitar servico
+                    </button>
+                </div>
+            `;
+        }
+        html += '</div>';
+        container.innerHTML = html;
+    } catch (e) {
+        container.innerHTML = '<p style="color:var(--danger);text-align:center;padding:2rem">Erro ao carregar</p>';
+    }
+}
+
+async function carregarMeusSolicitations() {
+    const container = document.getElementById('tab-content-meus');
+    try {
+        const data = await apiCall('/prestador/solicitacoes');
+        if (!data.solicitacoes.length) {
+            container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem">Voce ainda nao aceitou nenhum servico.</p>';
+            return;
+        }
+        const statusColors = {aceito:'var(--info-bg)',em_andamento:'var(--warning-bg)',concluido:'var(--success-bg)',cancelado:'var(--danger-bg)',pendente:'var(--bg-alt)'};
+        const statusTextColors = {aceito:'var(--info)',em_andamento:'#B45309',concluido:'var(--success)',cancelado:'var(--danger)',pendente:'var(--text-muted)'};
+        let html = '<div class="pro-grid">';
+        for (const s of data.solicitacoes) {
+            html += `
+                <div class="pro-card" style="cursor:default">
+                    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.75rem">
+                        <span class="badge" style="background:${statusColors[s.status]||'var(--bg-alt)'};color:${statusTextColors[s.status]||'var(--text-muted)'}">${capitalize(s.status.replace('_',' '))}</span>
+                        <span style="font-size:0.75rem;color:var(--text-muted)">#${s.id}</span>
+                    </div>
+                    <p style="font-size:0.9rem;margin-bottom:0.75rem">${s.descricao.substring(0, 120)}${s.descricao.length > 120 ? '...' : ''}</p>
+                    <div class="pro-stats">
+                        <div class="pro-stat"><div class="label">Valor</div><div class="value">R$ ${s.preco_final.toFixed(0)}</div></div>
+                        <div class="pro-stat"><div class="label">Cliente</div><div class="value">${s.cliente_nome}</div></div>
+                    </div>
+                </div>
+            `;
+        }
+        html += '</div>';
+        container.innerHTML = html;
+    } catch (e) {
+        container.innerHTML = '<p style="color:var(--danger);text-align:center;padding:2rem">Erro ao carregar</p>';
+    }
+}
+
+async function aceitarSolicitacao(id) {
+    if (!confirm('Deseja aceitar este servico?')) return;
+    try {
+        await apiCall(`/solicitacoes/${id}/aceitar-prestador`, { method: 'POST' });
+        showToast('Servico aceito com sucesso!', 'success');
+        carregarDisponiveis();
+    } catch (e) {
+        showToast(e.message || 'Erro ao aceitar', 'error');
+    }
+}
+
+function showTab(tab) {
+    document.getElementById('tab-disponiveis').classList.toggle('tab-active', tab === 'disponiveis');
+    document.getElementById('tab-meus').classList.toggle('tab-active', tab === 'meus');
+    document.getElementById('tab-content-disponiveis').style.display = tab === 'disponiveis' ? 'block' : 'none';
+    document.getElementById('tab-content-meus').style.display = tab === 'meus' ? 'block' : 'none';
+    if (tab === 'meus') carregarMeusSolicitations();
+}
+
+// Init
+carregarPrestadorDashboard();
+carregarDisponiveis();
+
+// Polling every 30s for new solicitations
+setInterval(() => { if (_prestadorOnline) carregarDisponiveis(); }, 30000);
+
+{% else %}
+// ====== Cliente Dashboard ======
+async function carregarMinhasSolicitacoes() {
+    const container = document.getElementById('cliente-solicitacoes');
+    try {
+        const data = await apiCall('/cliente/solicitacoes');
+        if (!data.solicitacoes || !data.solicitacoes.length) {
+            container.innerHTML = `
+                <div style="text-align:center;padding:3rem 1rem">
+                    <i class="fi fi-rr-document" style="font-size:3rem;color:var(--text-muted);display:block;margin-bottom:1rem"></i>
+                    <p style="color:var(--text-muted);font-size:1.1rem;margin-bottom:0.5rem">Voce ainda nao fez nenhuma solicitacao</p>
+                    <a href="/" class="btn btn-primary" style="display:inline-flex;width:auto;margin-top:1rem">
+                        <i class="fi fi-rr-search" aria-hidden="true"></i> Solicitar servico
+                    </a>
+                </div>
+            `;
+            return;
+        }
+        const statusLabels = {pendente:'Pendente',aceito:'Aceito',em_andamento:'Em andamento',concluido:'Concluido',cancelado:'Cancelado'};
+        const statusColors = {aceito:'var(--info-bg)',em_andamento:'var(--warning-bg)',concluido:'var(--success-bg)',cancelado:'var(--danger-bg)',pendente:'var(--bg-alt)'};
+        const statusTextColors = {aceito:'var(--info)',em_andamento:'#B45309',concluido:'var(--success)',cancelado:'var(--danger)',pendente:'var(--text-muted)'};
+        let html = '<div class="pro-grid">';
+        for (const s of data.solicitacoes) {
+            html += `
+                <div class="pro-card" style="cursor:default">
+                    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.75rem">
+                        <span class="badge" style="background:${statusColors[s.status]||'var(--bg-alt)'};color:${statusTextColors[s.status]||'var(--text-muted)'}">${statusLabels[s.status]||s.status}</span>
+                        <span style="font-size:0.75rem;color:var(--text-muted)">${s.criado_em ? new Date(s.criado_em).toLocaleDateString('pt-BR') : ''}</span>
+                    </div>
+                    <p style="font-size:0.9rem;margin-bottom:0.75rem">${s.descricao}</p>
+                    <div class="pro-stats">
+                        <div class="pro-stat"><div class="label">Valor</div><div class="value">R$ ${s.preco_final.toFixed(0)}</div></div>
+                        <div class="pro-stat"><div class="label">Categoria</div><div class="value">${capitalize(s.categoria)}</div></div>
+                        <div class="pro-stat"><div class="label">Profissional</div><div class="value">${s.profissional_nome}</div></div>
+                    </div>
+                </div>
+            `;
+        }
+        html += '</div>';
+        container.innerHTML = html;
+    } catch (e) {
+        container.innerHTML = '<p style="color:var(--danger);text-align:center;padding:2rem">Erro: ' + e.message + '</p>';
+    }
+}
+carregarMinhasSolicitacoes();
+// Poll every 30s
+setInterval(carregarMinhasSolicitacoes, 30000);
+{% endif %}
 </script>
 {% endblock %}

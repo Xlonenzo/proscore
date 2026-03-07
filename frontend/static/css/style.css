@@ -1995,3 +1995,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 /* Pink variable kept for compat */
 .pink { color: var(--cta-light); }
+
+/* Tab active state */
+.tab-active {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border-color: var(--primary) !important;
+}

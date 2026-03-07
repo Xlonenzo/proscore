@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Esqueci minha senha{% endblock %}
+{% block content %}
+<section class="section" style="min-height:70vh;display:flex;align-items:center;justify-content:center">
+    <div class="form-container" style="max-width:440px">
+        <h2 style="text-align:center;margin-bottom:0.5rem;font-size:1.75rem;font-weight:800">Esqueceu sua senha?</h2>
+        <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;font-size:0.9rem">Informe seu email para receber instrucoes de redefinicao</p>
+
+        <div id="reset-alert" class="alert" style="display:none" role="alert"></div>
+
+        <div id="form-email">
+            <form onsubmit="solicitarReset(event)" novalidate>
+                <div class="form-group">
+                    <label for="reset-email"><i class="fi fi-rr-envelope" aria-hidden="true"></i> Email</label>
+                    <input type="email" id="reset-email" required autocomplete="email" placeholder="seu@email.com" aria-required="true">
+                </div>
+                <button type="submit" class="btn btn-primary" id="reset-btn">
+                    <i class="fi fi-rr-key" aria-hidden="true"></i> Enviar instrucoes
+                </button>
+            </form>
+        </div>
+
+        <div id="form-nova-senha" style="display:none">
+            <form onsubmit="redefinirSenha(event)" novalidate>
+                <div class="form-group">
+                    <label for="reset-token"><i class="fi fi-rr-key" aria-hidden="true"></i> Token de redefinicao</label>
+                    <input type="text" id="reset-token" required placeholder="Cole o token recebido" aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="nova-senha"><i class="fi fi-rr-lock" aria-hidden="true"></i> Nova senha</label>
+                    <input type="password" id="nova-senha" required placeholder="Minimo 6 caracteres" minlength="6" aria-required="true">
+                </div>
+                <button type="submit" class="btn btn-primary" id="nova-senha-btn">
+                    <i class="fi fi-rr-check" aria-hidden="true"></i> Redefinir senha
+                </button>
+            </form>
+        </div>
+
+        <p style="text-align:center;margin-top:1.5rem;font-size:0.9rem;color:var(--text-secondary)">
+            Lembrou a senha? <a href="/login" style="color:var(--cta);font-weight:600;text-decoration:none">Entrar</a>
+        </p>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function solicitarReset(event) {
+    event.preventDefault();
+    const btn = document.getElementById('reset-btn');
+    const alertEl = document.getElementById('reset-alert');
+    const email = document.getElementById('reset-email').value.trim();
+
+    if (!email) {
+        alertEl.textContent = 'Informe seu email.';
+        alertEl.className = 'alert alert-error';
+        alertEl.style.display = 'flex';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    alertEl.style.display = 'none';
+
+    try {
+        const data = await apiCall('/auth/esqueceu-senha', {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+        });
+        alertEl.textContent = data.mensagem;
+        alertEl.className = 'alert alert-success';
+        alertEl.style.display = 'flex';
+        document.getElementById('form-email').style.display = 'none';
+        document.getElementById('form-nova-senha').style.display = 'block';
+    } catch (error) {
+        alertEl.textContent = error.message || 'Erro ao enviar';
+        alertEl.className = 'alert alert-error';
+        alertEl.style.display = 'flex';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fi fi-rr-key" aria-hidden="true"></i> Enviar instrucoes';
+    }
+}
+
+async function redefinirSenha(event) {
+    event.preventDefault();
+    const btn = document.getElementById('nova-senha-btn');
+    const alertEl = document.getElementById('reset-alert');
+    const token = document.getElementById('reset-token').value.trim();
+    const novaSenha = document.getElementById('nova-senha').value;
+
+    if (!token || !novaSenha) {
+        alertEl.textContent = 'Preencha todos os campos.';
+        alertEl.className = 'alert alert-error';
+        alertEl.style.display = 'flex';
+        return;
+    }
+
+    if (novaSenha.length < 6) {
+        alertEl.textContent = 'A senha deve ter no minimo 6 caracteres.';
+        alertEl.className = 'alert alert-error';
+        alertEl.style.display = 'flex';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Redefinindo...';
+
+    try {
+        await apiCall('/auth/redefinir-senha', {
+            method: 'POST',
+            body: JSON.stringify({ token, nova_senha: novaSenha }),
+        });
+        alertEl.textContent = 'Senha redefinida com sucesso! Redirecionando...';
+        alertEl.className = 'alert alert-success';
+        alertEl.style.display = 'flex';
+        setTimeout(() => window.location.href = '/login', 2000);
+    } catch (error) {
+        alertEl.textContent = error.message || 'Token invalido ou expirado';
+        alertEl.className = 'alert alert-error';
+        alertEl.style.display = 'flex';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fi fi-rr-check" aria-hidden="true"></i> Redefinir senha';
+    }
+}
+
+// Check URL for token
+const params = new URLSearchParams(window.location.search);
+const tokenParam = params.get('token');
+if (tokenParam) {
+    document.getElementById('form-email').style.display = 'none';
+    document.getElementById('form-nova-senha').style.display = 'block';
+    document.getElementById('reset-token').value = tokenParam;
+}
+</script>
+{% endblock %}

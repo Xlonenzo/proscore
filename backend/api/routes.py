@@ -1,4 +1,5 @@
 """Rotas da API PASSA."""
+import os
 import random
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -23,10 +24,16 @@ from backend.auth import (
     hash_senha,
     verificar_senha,
     criar_token,
+    criar_token_reset,
     get_current_user,
     COOKIE_NAME,
+    SECRET_KEY,
+    ALGORITHM,
 )
+from jose import JWTError, jwt
 import datetime
+
+_IS_HTTPS = os.environ.get("RENDER", "") != "" or os.environ.get("HTTPS", "") == "1"
 
 router = APIRouter(prefix="/api", tags=["PASSA"])
 
@@ -171,7 +178,7 @@ def registro_cliente(req: RegistroClienteRequest, db: Session = Depends(get_db))
         value=token,
         httponly=True,
         samesite="lax",
-        secure=True,
+        secure=_IS_HTTPS,
         max_age=86400,
     )
     return response
@@ -223,7 +230,7 @@ def registro_prestador(req: RegistroPrestadorRequest, db: Session = Depends(get_
         value=token,
         httponly=True,
         samesite="lax",
-        secure=True,
+        secure=_IS_HTTPS,
         max_age=86400,
     )
     return response
@@ -250,7 +257,7 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
         value=token,
         httponly=True,
         samesite="lax",
-        secure=True,
+        secure=_IS_HTTPS,
         max_age=86400,
     )
     return response
@@ -262,6 +269,48 @@ def logout():
     response = JSONResponse(content={"sucesso": True})
     response.delete_cookie(COOKIE_NAME)
     return response
+
+
+class ResetSenhaRequest(BaseModel):
+    email: str
+
+
+class NovaSenhaRequest(BaseModel):
+    token: str
+    nova_senha: str
+
+
+@router.post("/auth/esqueceu-senha")
+def esqueceu_senha(req: ResetSenhaRequest, db: Session = Depends(get_db)):
+    """Envia instrucoes para redefinir senha."""
+    usuario = db.query(Usuario).filter(Usuario.email == req.email).first()
+    if usuario:
+        token = criar_token_reset({"sub": str(usuario.id)})
+        print(f"[RESET SENHA] Token para {req.email}: {token}")
+    return {
+        "sucesso": True,
+        "mensagem": "Se o email estiver cadastrado, voce recebera instrucoes para redefinir sua senha.",
+    }
+
+
+@router.post("/auth/redefinir-senha")
+def redefinir_senha(req: NovaSenhaRequest, db: Session = Depends(get_db)):
+    """Redefine a senha usando token de reset."""
+    try:
+        payload = jwt.decode(req.token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("tipo") != "reset":
+            raise HTTPException(status_code=400, detail="Token invalido")
+        user_id = int(payload.get("sub"))
+    except (JWTError, ValueError, TypeError):
+        raise HTTPException(status_code=400, detail="Token invalido ou expirado")
+
+    usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario nao encontrado")
+
+    usuario.senha_hash = hash_senha(req.nova_senha)
+    db.commit()
+    return {"sucesso": True}
 
 
 @router.get("/auth/me")
@@ -721,6 +770,40 @@ def cliente_historico(
         })
 
     return {"historico": resultado}
+
+
+@router.get("/cliente/solicitacoes")
+def cliente_solicitacoes(
+    usuario: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Retorna solicitacoes do cliente."""
+    if usuario.tipo != "cliente" or not usuario.cliente:
+        raise HTTPException(status_code=400, detail="Apenas clientes")
+
+    solicitacoes = (
+        db.query(SolicitacaoServico)
+        .filter(SolicitacaoServico.cliente_id == usuario.cliente.id)
+        .order_by(SolicitacaoServico.criado_em.desc())
+        .limit(50)
+        .all()
+    )
+
+    resultado = []
+    for s in solicitacoes:
+        prof = db.query(Profissional).get(s.profissional_id) if s.profissional_id else None
+        resultado.append({
+            "id": s.id,
+            "descricao": (s.descricao or "")[:100],
+            "categoria": s.categoria,
+            "status": s.status,
+            "preco_final": s.preco_final,
+            "urgente": s.urgente,
+            "criado_em": s.criado_em.isoformat() if s.criado_em else None,
+            "profissional_nome": prof.nome if prof else "\u2014",
+        })
+
+    return {"solicitacoes": resultado}
 
 
 # ======== Profissionais ========
