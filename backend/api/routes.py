@@ -31,24 +31,6 @@ import datetime
 router = APIRouter(prefix="/api", tags=["PASSA"])
 
 
-@router.get("/health")
-def health_check(db: Session = Depends(get_db)):
-    """Diagnostico do banco de dados."""
-    from sqlalchemy import text, inspect
-    try:
-        insp = inspect(db.bind)
-        tables = insp.get_table_names()
-        result = {"status": "ok", "tables": {}}
-        for t in ["usuarios", "clientes", "profissionais", "solicitacoes", "avaliacoes", "servicos", "pagamentos"]:
-            if t in tables:
-                cols = [c["name"] for c in insp.get_columns(t)]
-                result["tables"][t] = cols
-            else:
-                result["tables"][t] = "MISSING"
-        return result
-    except Exception as e:
-        return {"status": "error", "detail": str(e)}
-
 
 # ======== Schemas ========
 
