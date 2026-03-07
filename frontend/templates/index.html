@@ -46,9 +46,9 @@
             </form>
 
             <div class="hero-foto-row" style="margin-top:0.75rem">
-                <label for="hero-foto" style="display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer;color:#fff;font-size:0.85rem;padding:0.55rem 1.25rem;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius-full);backdrop-filter:blur(4px);transition:background 0.2s">
-                    <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto do local (melhora a precisao)
-                </label>
+                <button type="button" onclick="document.getElementById('hero-foto').click()" class="hero-btn" style="background:#fff;color:var(--primary);font-size:0.85rem;padding:0.55rem 1.25rem;gap:0.5rem">
+                    <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto do local
+                </button>
                 <input type="file" id="hero-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
                 <div id="hero-foto-preview" style="display:none;margin-top:0.75rem;position:relative">
                     <img id="hero-foto-img" style="max-height:120px;border-radius:8px;border:2px solid rgba(255,255,255,0.3)">
@@ -119,9 +119,9 @@
         </form>
 
         <div class="hero-foto-row" style="margin-top:0.75rem">
-            <label for="hero-foto" style="display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer;color:#fff;font-size:0.85rem;padding:0.55rem 1.25rem;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius-full);backdrop-filter:blur(4px);transition:background 0.2s">
-                <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto do local (melhora a precisao)
-            </label>
+            <button type="button" onclick="document.getElementById('hero-foto').click()" class="hero-btn" style="background:#fff;color:var(--primary);font-size:0.85rem;padding:0.55rem 1.25rem;gap:0.5rem">
+                <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto do local
+            </button>
             <input type="file" id="hero-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
             <div id="hero-foto-preview" style="display:none;margin-top:0.75rem;position:relative">
                 <img id="hero-foto-img" style="max-height:120px;border-radius:8px;border:2px solid rgba(255,255,255,0.3)">
