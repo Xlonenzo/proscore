@@ -46,8 +46,13 @@ app.include_router(admin_router)
 
 @app.on_event("startup")
 def startup():
-    init_db()
-    seed_all()
+    try:
+        init_db()
+        seed_all()
+    except Exception as e:
+        import traceback
+        print(f"[STARTUP ERROR] {e}")
+        traceback.print_exc()
 
 
 # ======== Pages ========

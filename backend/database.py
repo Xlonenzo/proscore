@@ -52,6 +52,6 @@ def _migrate(eng):
         if "is_admin" not in cols:
             with eng.begin() as conn:
                 conn.execute(text(
-                    "ALTER TABLE usuarios ADD COLUMN is_admin BOOLEAN DEFAULT 0"
+                    "ALTER TABLE usuarios ADD COLUMN is_admin BOOLEAN DEFAULT FALSE"
                 ))
             print("[MIGRATE] Added is_admin column to usuarios")
