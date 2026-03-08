@@ -15,9 +15,8 @@
     </div>
     <div class="hero-content">
         {% if usuario and usuario.tipo == 'cliente' %}
-        <!-- HERO LOGADO: fluxo Uber-like -->
-        <h1 id="hero-heading"><span class="hero-highlight">Ola, {{ usuario.nome.split(' ')[0] }}!</span><br>O que você precisa?</h1>
-        <p>Descreva o serviço, veja o preço na hora e escolha seu profissional.</p>
+        <p class="hero-eyebrow">Olá, {{ usuario.nome.split(' ')[0] }}</p>
+        <h1 id="hero-heading">O que você<br>precisa resolver?</h1>
 
         <div class="hero-logado-form" id="hero-logado-form"
              data-endereco="{{ usuario.cliente.endereco if usuario.cliente else '' }}"
@@ -46,8 +45,8 @@
             </form>
 
             <div class="hero-foto-row" style="margin-top:0.75rem">
-                <button type="button" onclick="document.getElementById('hero-foto').click()" class="hero-btn" style="background:#fff;color:var(--primary);font-size:0.85rem;padding:0.55rem 1.25rem;gap:0.5rem">
-                    <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto do local
+                <button type="button" onclick="document.getElementById('hero-foto').click()" class="hero-btn-outline">
+                    <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto
                 </button>
                 <input type="file" id="hero-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
                 <div id="hero-foto-preview" style="display:none;margin-top:0.75rem;position:relative">
@@ -104,8 +103,8 @@
 
         {% else %}
         <!-- HERO VISITANTE -->
-        <h1 id="hero-heading">Contrate serviços<br>para sua casa com<br><span class="hero-highlight">preço justo</span></h1>
-        <p>Diga o que precisa, receba o preço na hora e escolha entre profissionais avaliados por quem já contratou.</p>
+        <h1 id="hero-heading">Serviços para sua casa.<br><span class="hero-highlight">Preço na hora.</span></h1>
+        <p class="hero-sub">Descreva o que precisa, veja quanto custa e escolha um profissional verificado.</p>
 
         <form class="hero-input-wrapper" onsubmit="event.preventDefault(); precificarRapido();" role="search" aria-label="Precificar serviço">
             <label for="hero-servico" class="sr-only">Descreva o serviço</label>
@@ -114,13 +113,13 @@
                 autocomplete="off"
                 aria-label="Descreva o serviço que você precisa">
             <button type="submit" id="hero-btn" class="hero-btn">
-                <i class="fi fi-rr-search" aria-hidden="true"></i> Precificar
+                Buscar preço
             </button>
         </form>
 
         <div class="hero-foto-row" style="margin-top:0.75rem">
-            <button type="button" onclick="document.getElementById('hero-foto').click()" class="hero-btn" style="background:#fff;color:var(--primary);font-size:0.85rem;padding:0.55rem 1.25rem;gap:0.5rem">
-                <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto do local
+            <button type="button" onclick="document.getElementById('hero-foto').click()" class="hero-btn-outline">
+                <i class="fi fi-rr-camera" aria-hidden="true"></i> Enviar foto
             </button>
             <input type="file" id="hero-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
             <div id="hero-foto-preview" style="display:none;margin-top:0.75rem;position:relative">
@@ -155,236 +154,113 @@
             </div>
         </div>
         {% endif %}
+    </div>
+</section>
 
-        <div class="hero-stats" aria-label="Destaques da plataforma">
-            <div class="hero-stat">
-                <div class="hero-stat-number"><i class="fi fi-rr-bolt" aria-hidden="true"></i></div>
-                <div class="hero-stat-label">Todo tipo de serviço</div>
+<!-- CATEGORIES — horizontal strip -->
+<section class="categories-strip" aria-labelledby="categories">
+    <div class="categories-inner">
+        <h2 id="categories" class="sr-only">Categorias</h2>
+        <a href="/profissionais?cat=eletrica" class="cat-pill reveal">
+            <i class="fi fi-rr-bolt" aria-hidden="true"></i> Elétrica
+        </a>
+        <a href="/profissionais?cat=hidraulica" class="cat-pill reveal">
+            <i class="fi fi-rr-faucet-drip" aria-hidden="true"></i> Hidráulica
+        </a>
+        <a href="/profissionais?cat=limpeza" class="cat-pill reveal">
+            <i class="fi fi-rr-sparkles" aria-hidden="true"></i> Limpeza
+        </a>
+        <a href="/profissionais?cat=pintura" class="cat-pill reveal">
+            <i class="fi fi-rr-paint-roller" aria-hidden="true"></i> Pintura
+        </a>
+        <a href="/profissionais?cat=jardinagem" class="cat-pill reveal">
+            <i class="fi fi-rr-leaf" aria-hidden="true"></i> Jardinagem
+        </a>
+        <a href="/profissionais?cat=montagem" class="cat-pill reveal">
+            <i class="fi fi-rr-hammer" aria-hidden="true"></i> Montagem
+        </a>
+        <a href="/profissionais?cat=organizacao" class="cat-pill reveal">
+            <i class="fi fi-rr-boxes" aria-hidden="true"></i> Organização
+        </a>
+        <a href="/profissionais?cat=costura" class="cat-pill reveal">
+            <i class="fi fi-rr-scissors" aria-hidden="true"></i> Costura
+        </a>
+        <a href="/profissionais?cat=reforma" class="cat-pill reveal">
+            <i class="fi fi-rr-house-building" aria-hidden="true"></i> Reforma
+        </a>
+    </div>
+</section>
+
+<!-- HOW IT WORKS — compact horizontal -->
+<section class="how-section" aria-labelledby="how-it-works">
+    <div class="how-inner">
+        <div class="how-left">
+            <h2 id="how-it-works">Como funciona</h2>
+            <p>Do pedido ao serviço feito, sem complicação.</p>
+        </div>
+        <div class="how-steps">
+            <div class="how-step reveal">
+                <span class="how-num">1</span>
+                <div>
+                    <strong>Descreva</strong>
+                    <p>Diga o que precisa com suas palavras.</p>
+                </div>
             </div>
-            <div class="hero-stat">
-                <div class="hero-stat-number"><i class="fi fi-rr-shield-check" aria-hidden="true"></i></div>
-                <div class="hero-stat-label">Profissionais verificados</div>
+            <div class="how-step reveal">
+                <span class="how-num">2</span>
+                <div>
+                    <strong>Veja o preço</strong>
+                    <p>O sistema calcula na hora baseado na região e complexidade.</p>
+                </div>
             </div>
-            <div class="hero-stat">
-                <div class="hero-stat-number"><i class="fi fi-rr-calculator" aria-hidden="true"></i></div>
-                <div class="hero-stat-label">Preço justo na hora</div>
+            <div class="how-step reveal">
+                <span class="how-num">3</span>
+                <div>
+                    <strong>Escolha</strong>
+                    <p>Compare profissionais pelo score, avaliações e disponibilidade.</p>
+                </div>
+            </div>
+            <div class="how-step reveal">
+                <span class="how-num">4</span>
+                <div>
+                    <strong>Avalie</strong>
+                    <p>Seu feedback atualiza o score do profissional.</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-
-<!-- CATEGORIES -->
-<section class="section" aria-labelledby="categories">
-    <h2 class="section-title reveal" id="categories">Categorias disponíveis</h2>
-    <p class="section-subtitle reveal reveal-delay-1">Escolha o tipo de serviço que você precisa</p>
-
-    <div class="cat-grid">
-        <a href="/profissionais?cat=eletrica" class="cat-card reveal reveal-delay-1">
-            <div class="cat-icon coral" aria-hidden="true">
-                <i class="fi fi-rr-bolt"></i>
-            </div>
-            <div>
-                <h3>Elétrica</h3>
-                <p>Chuveiros, tomadas, iluminação</p>
-            </div>
-        </a>
-        <a href="/profissionais?cat=hidraulica" class="cat-card reveal reveal-delay-2">
-            <div class="cat-icon teal" aria-hidden="true">
-                <i class="fi fi-rr-faucet-drip"></i>
-            </div>
-            <div>
-                <h3>Hidráulica</h3>
-                <p>Vazamentos, torneiras, encanamento</p>
-            </div>
-        </a>
-        <a href="/profissionais?cat=jardinagem" class="cat-card reveal reveal-delay-3">
-            <div class="cat-icon green" aria-hidden="true">
-                <i class="fi fi-rr-leaf"></i>
-            </div>
-            <div>
-                <h3>Jardinagem</h3>
-                <p>Poda, plantio, manutenção de jardim</p>
-            </div>
-        </a>
-        <a href="/profissionais?cat=pintura" class="cat-card reveal reveal-delay-4">
-            <div class="cat-icon pink" aria-hidden="true">
-                <i class="fi fi-rr-paint-roller"></i>
-            </div>
-            <div>
-                <h3>Pintura</h3>
-                <p>Paredes, texturas, acabamento</p>
-            </div>
-        </a>
-        <a href="/profissionais?cat=montagem" class="cat-card reveal reveal-delay-5">
-            <div class="cat-icon indigo" aria-hidden="true">
-                <i class="fi fi-rr-hammer"></i>
-            </div>
-            <div>
-                <h3>Montagem e Reparos</h3>
-                <p>Móveis, prateleiras, pequenos reparos</p>
-            </div>
-        </a>
-        <a href="/profissionais?cat=organizacao" class="cat-card reveal reveal-delay-6">
-            <div class="cat-icon coral" aria-hidden="true">
-                <i class="fi fi-rr-boxes"></i>
-            </div>
-            <div>
-                <h3>Organização</h3>
-                <p>Closets, despensa, mudança</p>
-            </div>
-        </a>
-        <a href="/profissionais?cat=costura" class="cat-card reveal reveal-delay-1">
-            <div class="cat-icon pink" aria-hidden="true">
-                <i class="fi fi-rr-scissors"></i>
-            </div>
-            <div>
-                <h3>Costura e Ajustes</h3>
-                <p>Roupas, cortinas, estofados</p>
-            </div>
-        </a>
-        <a href="/profissionais?cat=reforma" class="cat-card reveal reveal-delay-2">
-            <div class="cat-icon indigo" aria-hidden="true">
-                <i class="fi fi-rr-house-building"></i>
-            </div>
-            <div>
-                <h3>Reforma</h3>
-                <p>Pisos, gesso, drywall</p>
-            </div>
-        </a>
-        <a href="/profissionais?cat=limpeza" class="cat-card reveal reveal-delay-3">
-            <div class="cat-icon orange" aria-hidden="true">
-                <i class="fi fi-rr-sparkles"></i>
-            </div>
-            <div>
-                <h3>Limpeza e Faxina</h3>
-                <p>Residencial, pós-obra, vidros</p>
-            </div>
-        </a>
-    </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<div class="section-bg">
-<section class="section" aria-labelledby="how-it-works">
-    <h2 class="section-title reveal" id="how-it-works">Como funciona</h2>
-    <p class="section-subtitle reveal reveal-delay-1">Resolve qualquer serviço em 4 passos</p>
-
-    <div class="steps-grid">
-        <div class="step-card reveal reveal-delay-1">
-            <div class="step-number" aria-hidden="true">1</div>
-            <h3>Descreva o problema</h3>
-            <p>Escreva com suas palavras o que precisa. "Trocar chuveiro", "Pintar sala", "Desentupir pia".</p>
+<!-- VALUE PROPS — asymmetric, editorial -->
+<section class="value-section">
+    <div class="value-inner">
+        <div class="value-block reveal">
+            <div class="value-icon"><i class="fi fi-rr-shield-check" aria-hidden="true"></i></div>
+            <h3>Verificação real</h3>
+            <p>Identidade e antecedentes conferidos. Nenhum profissional atende sem passar pela verificação.</p>
         </div>
-        <div class="step-card reveal reveal-delay-2">
-            <div class="step-number" aria-hidden="true">2</div>
-            <h3>Receba o preço</h3>
-            <p>O sistema analisa região, complexidade e tipo de serviço para calcular uma faixa de preço justa.</p>
+        <div class="value-block value-block--highlight reveal">
+            <h3>Score de 0 a 1000</h3>
+            <p>Cada profissional tem um score público. Pontualidade, qualidade do trabalho e feedback dos clientes — tudo conta.</p>
+            <span class="value-score-demo">847</span>
         </div>
-        <div class="step-card reveal reveal-delay-3">
-            <div class="step-number" aria-hidden="true">3</div>
-            <h3>Escolha o profissional</h3>
-            <p>Veja o score, avaliações e histórico de cada profissional antes de decidir.</p>
-        </div>
-        <div class="step-card reveal reveal-delay-4">
-            <div class="step-number" aria-hidden="true">4</div>
-            <h3>Avalie depois</h3>
-            <p>Após o serviço, avalie o profissional. O score dele sobe ou desce com base no seu feedback.</p>
-        </div>
-    </div>
-</section>
-</div>
-
-<!-- FEATURES -->
-<section class="section" aria-labelledby="why-passa">
-    <h2 class="section-title reveal" id="why-passa">Por que usar o PASSA?</h2>
-    <p class="section-subtitle reveal reveal-delay-1">O que torna a plataforma diferente</p>
-
-    <div class="features-grid">
-        <div class="feature-card reveal reveal-delay-1">
-            <div class="feature-icon" aria-hidden="true">
-                <i class="fi fi-rr-shield-check"></i>
-            </div>
-            <div>
-                <h3>Documentos verificados</h3>
-                <p>Identidade e antecedentes conferidos antes do profissional poder atender na plataforma.</p>
-            </div>
-        </div>
-        <div class="feature-card reveal reveal-delay-2">
-            <div class="feature-icon" aria-hidden="true">
-                <i class="fi fi-rr-lock"></i>
-            </div>
-            <div>
-                <h3>Pagamento seguro</h3>
-                <p>O valor fica retido até a conclusão do serviço. Se não for realizado, você recebe de volta.</p>
-            </div>
-        </div>
-        <div class="feature-card reveal reveal-delay-3">
-            <div class="feature-icon" aria-hidden="true">
-                <i class="fi fi-rr-brain-circuit"></i>
-            </div>
-            <div>
-                <h3>Preço calculado</h3>
-                <p>A faixa de preço é definida com base na região, tipo de serviço e complexidade. Sem surpresas.</p>
-            </div>
-        </div>
-        <div class="feature-card reveal reveal-delay-4">
-            <div class="feature-icon" aria-hidden="true">
-                <i class="fi fi-rr-trophy"></i>
-            </div>
-            <div>
-                <h3>Score de 0 a 1000</h3>
-                <p>Cada profissional tem um score público baseado em pontualidade, qualidade e feedback dos clientes.</p>
-            </div>
+        <div class="value-block reveal">
+            <div class="value-icon"><i class="fi fi-rr-lock" aria-hidden="true"></i></div>
+            <h3>Pagamento protegido</h3>
+            <p>O valor só é liberado quando o serviço é concluído. Sem risco.</p>
         </div>
     </div>
 </section>
 
-<!-- TRUST BADGES -->
-<div class="section-bg">
-<section class="section" aria-labelledby="trust-heading">
-    <h2 class="section-title reveal" id="trust-heading">Pode confiar</h2>
-    <p class="section-subtitle reveal reveal-delay-1">Profissionais verificados, qualificados e disponíveis para você</p>
-
-    <div class="trust-grid">
-        <div class="trust-card reveal reveal-delay-1">
-            <div class="trust-icon" aria-hidden="true">
-                <i class="fi fi-rr-star"></i>
-            </div>
-            <span>Top Avaliados</span>
-        </div>
-        <div class="trust-card reveal reveal-delay-2">
-            <div class="trust-icon" aria-hidden="true">
-                <i class="fi fi-rr-id-badge"></i>
-            </div>
-            <span>Identidade Verificada</span>
-        </div>
-        <div class="trust-card reveal reveal-delay-3">
-            <div class="trust-icon" aria-hidden="true">
-                <i class="fi fi-rr-document-signed"></i>
-            </div>
-            <span>Antecedentes OK</span>
-        </div>
-        <div class="trust-card reveal reveal-delay-4">
-            <div class="trust-icon" aria-hidden="true">
-                <i class="fi fi-rr-check-circle"></i>
-            </div>
-            <span>Perfil Completo</span>
-        </div>
+<!-- CTA — minimal inline -->
+<section class="cta-inline reveal">
+    <div class="cta-inline-inner">
+        <h2>Precisa de algo?</h2>
+        <a href="{% if usuario %}/solicitar{% else %}/cadastro/cliente{% endif %}" class="btn btn-primary" style="width:auto">
+            {% if usuario %}Solicitar serviço{% else %}Começar agora{% endif %}
+        </a>
     </div>
 </section>
-</div>
-
-<!-- CTA -->
-<div style="padding:0 2rem 5rem;margin-top:-1rem">
-    <section class="cta-section reveal" aria-labelledby="cta-heading">
-        <h2 id="cta-heading">Pronto para começar?</h2>
-        <p>Faça uma cotação agora mesmo - é grátis e sem compromisso</p>
-        <a href="/solicitar" class="btn btn-primary" style="display:inline-flex;width:auto;padding:0.85rem 2.5rem;font-size:1.05rem">
-            <i class="fi fi-rr-rocket" aria-hidden="true"></i> Solicitar serviço
-        </a>
-    </section>
-</div>
 {% endblock %}
 
 {% block scripts %}

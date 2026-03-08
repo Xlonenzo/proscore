@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where python3)",
+      "Bash(where py)",
+      "Bash(ls /c/Python*/python.exe)",
+      "Read(//c/Users/Cliente/AppData/Local/Programs/Python/**)",
+      "Read(//c/Users/Cliente/miniconda3/**)",
+      "Read(//c/Users/Cliente/anaconda3/**)",
+      "Bash(/c/Users/Cliente/AppData/Local/Programs/Python/Python313/python.exe:*)",
+      "Bash(/c/Users/Cliente/AppData/Local/Programs/Python/Python312/python.exe:*)",
+      "WebSearch",
+      "WebFetch(domain:localhost)",
+      "Bash(curl:*)",
+      "WebFetch(domain:www.behance.net)",
+      "WebFetch(domain:www.freepik.com)",
+      "Bash(rm:*)",
+      "Bash(render:*)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(/c/Users/Cliente/AppData/Local/Programs/Python/Python312/Scripts/render:*)",
+      "Bash(pip show:*)",
+      "Bash(python:*)",
+      "Bash(/c/Users/Cliente/AppData/Local/Programs/Python/Python312/Scripts/render-cli.exe:*)",
+      "Bash(DATABASE_URL=\"postgresql://test:test@localhost/test\" /c/Users/Cliente/AppData/Local/Programs/Python/Python312/python.exe:*)"
+    ]
+  }
+}

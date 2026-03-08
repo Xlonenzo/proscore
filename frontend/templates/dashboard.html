@@ -8,7 +8,7 @@
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
             <div>
                 <h2 class="section-title" id="dashboard-heading" style="margin-bottom:0.25rem">Painel do Prestador</h2>
-                <p class="section-subtitle" style="margin-bottom:0">Gerencie seus servicos e acompanhe seus ganhos</p>
+                <p class="section-subtitle" style="margin-bottom:0">Gerencie seus serviços e acompanhe seus ganhos</p>
             </div>
             <button id="btn-online" class="btn btn-secondary" onclick="toggleOnline()" style="width:auto;padding:0.6rem 1.5rem">
                 <i class="fi fi-rr-signal-alt" aria-hidden="true"></i> <span id="online-text">Carregando...</span>
@@ -23,15 +23,15 @@
         <!-- Tabs -->
         <div style="display:flex;gap:0.5rem;margin:2rem 0 1rem;flex-wrap:wrap">
             <button class="btn btn-secondary tab-active" id="tab-disponiveis" onclick="showTab('disponiveis')" style="width:auto;padding:0.5rem 1.25rem;font-size:0.85rem">
-                <i class="fi fi-rr-bell" aria-hidden="true"></i> Disponiveis
+                <i class="fi fi-rr-bell" aria-hidden="true"></i> Disponíveis
             </button>
             <button class="btn btn-secondary" id="tab-meus" onclick="showTab('meus')" style="width:auto;padding:0.5rem 1.25rem;font-size:0.85rem">
-                <i class="fi fi-rr-list" aria-hidden="true"></i> Meus Servicos
+                <i class="fi fi-rr-list" aria-hidden="true"></i> Meus Serviços
             </button>
         </div>
 
         <div id="tab-content-disponiveis" aria-live="polite">
-            <div class="loading show"><div class="spinner"></div><p>Buscando servicos...</p></div>
+            <div class="loading show"><div class="spinner"></div><p>Buscando serviços...</p></div>
         </div>
         <div id="tab-content-meus" style="display:none" aria-live="polite"></div>
     </div>
@@ -39,7 +39,7 @@
     {% else %}
     <!-- CLIENTE DASHBOARD -->
     <h2 class="section-title" id="dashboard-heading">Meu Painel</h2>
-    <p class="section-subtitle">Acompanhe seus servicos</p>
+    <p class="section-subtitle">Acompanhe seus serviços</p>
 
     <div id="cliente-solicitacoes" aria-live="polite">
         <div class="loading show"><div class="spinner"></div><p>Carregando...</p></div>
@@ -68,15 +68,15 @@ async function carregarPrestadorDashboard() {
             </div>
             <div class="stat-card">
                 <div class="stat-value">${data.avaliacao_media.toFixed(1)}</div>
-                <div class="stat-label">Avaliacao</div>
+                <div class="stat-label">Avaliação</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">${data.total_servicos}</div>
-                <div class="stat-label">Servicos</div>
+                <div class="stat-label">Serviços</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">R$ ${data.ganhos_mes.toFixed(0)}</div>
-                <div class="stat-label">Ganhos do Mes</div>
+                <div class="stat-label">Ganhos do Mês</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">R$ ${data.ganhos_total.toFixed(0)}</div>
@@ -109,7 +109,7 @@ async function toggleOnline() {
         const data = await apiCall('/prestador/online', { method: 'PUT' });
         _prestadorOnline = data.online;
         updateOnlineBtn(data.online);
-        showToast(data.online ? 'Voce esta online! Recebera solicitacoes.' : 'Voce esta offline.', data.online ? 'success' : 'info');
+        showToast(data.online ? 'Você está online! Receberá solicitações.' : 'Você está offline.', data.online ? 'success' : 'info');
     } catch (e) {
         showToast('Erro ao alterar status', 'error');
     }
@@ -120,7 +120,7 @@ async function carregarDisponiveis() {
     try {
         const data = await apiCall('/prestador/solicitacoes/disponiveis');
         if (!data.solicitacoes.length) {
-            container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem">Nenhuma solicitacao disponivel no momento.</p>';
+            container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem">Nenhuma solicitação disponível no momento.</p>';
             return;
         }
         let html = '<div class="pro-grid">';
@@ -138,7 +138,7 @@ async function carregarDisponiveis() {
                         <div class="pro-stat"><div class="label">Cliente</div><div class="value">${s.cliente_nome}</div></div>
                     </div>
                     <button onclick="aceitarSolicitacao(${s.id})" class="btn btn-primary" style="margin-top:0.75rem">
-                        <i class="fi fi-rr-check" aria-hidden="true"></i> Aceitar servico
+                        <i class="fi fi-rr-check" aria-hidden="true"></i> Aceitar serviço
                     </button>
                 </div>
             `;
@@ -155,7 +155,7 @@ async function carregarMeusSolicitations() {
     try {
         const data = await apiCall('/prestador/solicitacoes');
         if (!data.solicitacoes.length) {
-            container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem">Voce ainda nao aceitou nenhum servico.</p>';
+            container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem">Você ainda não aceitou nenhum serviço.</p>';
             return;
         }
         const statusColors = {aceito:'var(--info-bg)',em_andamento:'var(--warning-bg)',concluido:'var(--success-bg)',cancelado:'var(--danger-bg)',pendente:'var(--bg-alt)'};
@@ -184,10 +184,10 @@ async function carregarMeusSolicitations() {
 }
 
 async function aceitarSolicitacao(id) {
-    if (!confirm('Deseja aceitar este servico?')) return;
+    if (!confirm('Deseja aceitar este serviço?')) return;
     try {
         await apiCall(`/solicitacoes/${id}/aceitar-prestador`, { method: 'POST' });
-        showToast('Servico aceito com sucesso!', 'success');
+        showToast('Serviço aceito com sucesso!', 'success');
         carregarDisponiveis();
     } catch (e) {
         showToast(e.message || 'Erro ao aceitar', 'error');
@@ -219,15 +219,15 @@ async function carregarMinhasSolicitacoes() {
             container.innerHTML = `
                 <div style="text-align:center;padding:3rem 1rem">
                     <i class="fi fi-rr-document" style="font-size:3rem;color:var(--text-muted);display:block;margin-bottom:1rem"></i>
-                    <p style="color:var(--text-muted);font-size:1.1rem;margin-bottom:0.5rem">Voce ainda nao fez nenhuma solicitacao</p>
+                    <p style="color:var(--text-muted);font-size:1.1rem;margin-bottom:0.5rem">Você ainda não fez nenhuma solicitação</p>
                     <a href="/" class="btn btn-primary" style="display:inline-flex;width:auto;margin-top:1rem">
-                        <i class="fi fi-rr-search" aria-hidden="true"></i> Solicitar servico
+                        <i class="fi fi-rr-search" aria-hidden="true"></i> Solicitar serviço
                     </a>
                 </div>
             `;
             return;
         }
-        const statusLabels = {pendente:'Pendente',aceito:'Aceito',em_andamento:'Em andamento',concluido:'Concluido',cancelado:'Cancelado'};
+        const statusLabels = {pendente:'Pendente',aceito:'Aceito',em_andamento:'Em andamento',concluido:'Concluído',cancelado:'Cancelado'};
         const statusColors = {aceito:'var(--info-bg)',em_andamento:'var(--warning-bg)',concluido:'var(--success-bg)',cancelado:'var(--danger-bg)',pendente:'var(--bg-alt)'};
         const statusTextColors = {aceito:'var(--info)',em_andamento:'#B45309',concluido:'var(--success)',cancelado:'var(--danger)',pendente:'var(--text-muted)'};
         let html = '<div class="pro-grid">';
